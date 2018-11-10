@@ -440,7 +440,18 @@ public class Main {
 						}
 						break;
 					case 3:
-
+						ArrayList<Paciente> listaPacientes = new ArrayList<Paciente>();
+						listaPacientes = pacienteDAO.getListPaciente();
+						
+						if(listaPacientes.size()>0) {
+							System.out.println("Digite o id do Paciente: ");
+							int idPaciente = scanner.nextInt();
+							
+							Paciente paciente = pacienteDAO.getPacienteById(idPaciente);
+							System.out.println("Nome do Paciente: "+paciente.getPacNome());
+						}else {
+							System.out.println("Não há paciente cadastrado no sistema!");
+						}
 						break;
 					case 4:
 
