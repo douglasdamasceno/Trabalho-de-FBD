@@ -168,8 +168,8 @@ public class EquipamentoDAO {
 		return false;
 	}
 	
-	public boolean AtualizarTipoDoEquipamento(Equipamento equipamento) {
-		String comandoSQL = "UPDATE equipamento SET idTipoEquipamento=? where idEquipamento =? ;";
+	public boolean AtualizarEquipamentoOTipoDoEquipamento(Equipamento equipamento) {
+		String comandoSQL = "UPDATE equipamento SET idTipoEquipamento=? WHERE idEquipamento =? ;";
 		this.connection = new Conexao().getConnection();
 		
 		try {
@@ -193,6 +193,36 @@ public class EquipamentoDAO {
 		}
 		return false;
 	}
+	
+	public boolean AtualizarEquipamentoDescricao(Equipamento equipamento) {
+		String comandoSQL = "UPDATE equipamento SET descricao = ? WHERE idEquipamento =?";
+		this.connection = new Conexao().getConnection();
+		
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
+			preparedStatement.setString(1, equipamento.getDescricao());
+			int qtdRowAffected = preparedStatement.executeUpdate();
+			preparedStatement.close();
+			if(qtdRowAffected>0)
+				return true;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		return false;
+	}
+	
 	
 //	public ArrayList<Equipamento> getListEquipamentosQueNaoEstaoNoPosto(int idEquipamento, int idEquipamentoDoPosto) {
 //		String comandoSQL = "select * from Equipamento E, EquipamentoDoPosto EP where ? != ?";
