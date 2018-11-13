@@ -9,7 +9,7 @@ public class Conexao {
 	private final Integer port = 5432;
 	private final String user = "postgres";
 	private final String password = "";
-	private final String database = "AppPostoDeSaude";
+	private final String database = "apppostodesaude";
 
 	public Connection getConnection() {
 		try {

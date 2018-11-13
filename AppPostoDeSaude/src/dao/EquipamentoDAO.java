@@ -138,14 +138,12 @@ public class EquipamentoDAO {
 
 	}
 
-	public boolean atualizarEquipamento(Equipamento equipamento) {
+	public boolean alterarEquipamento(Equipamento equipamento) {
 		String comandoSQL = "UPDATE equipamento SET idTipoEquipamento=?,descricao= ? where idEquipamento = ?;";
 
 		this.connection = new Conexao().getConnection();
-
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-
 			preparedStatement.setInt(1, equipamento.getIdTipoEquipamento());
 			preparedStatement.setString(2, equipamento.getDescricao());
 			preparedStatement.setInt(3, equipamento.getIdEquipamento());
@@ -168,13 +166,12 @@ public class EquipamentoDAO {
 		return false;
 	}
 	
-	public boolean AtualizarEquipamentoOTipoDoEquipamento(Equipamento equipamento) {
+	public boolean alterarTipoDoEquipamento(int tipoEquipamento) {
 		String comandoSQL = "UPDATE equipamento SET idTipoEquipamento=? WHERE idEquipamento =? ;";
 		this.connection = new Conexao().getConnection();
-		
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-			preparedStatement.setInt(1, equipamento.getIdTipoEquipamento());
+			preparedStatement.setInt(1, tipoEquipamento);
 			
 			int qtdRowAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -194,13 +191,12 @@ public class EquipamentoDAO {
 		return false;
 	}
 	
-	public boolean AtualizarEquipamentoDescricao(Equipamento equipamento) {
+	public boolean alterarDescricao(String descricao) {
 		String comandoSQL = "UPDATE equipamento SET descricao = ? WHERE idEquipamento =?";
 		this.connection = new Conexao().getConnection();
-		
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-			preparedStatement.setString(1, equipamento.getDescricao());
+			preparedStatement.setString(1, descricao);
 			int qtdRowAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
 			if(qtdRowAffected>0)
@@ -217,9 +213,6 @@ public class EquipamentoDAO {
 				e.printStackTrace();
 			}
 		}
-		
-		
-		
 		return false;
 	}
 	

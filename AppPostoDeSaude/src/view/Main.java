@@ -66,17 +66,13 @@ public class Main {
 								System.out.println("cadastrado com sucesso!");
 								break;
 							} else {
-								System.out.println("Falha ao tenter realizar cadastrado");
+								System.out.println("Falha ao tentar realizar cadastrado");
 							}
 
 							break;
 						case 2:
 
 							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
-//							if(listaTipoEquipamento.size() == 0) {
-//								System.out.println("Primeiro é necessario ter algun Tipo de Equipamento cadastrado!");
-//								break;
-//							}
 
 							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							if (listaTipoEquipamento.size() > 0) {
@@ -85,7 +81,6 @@ public class Main {
 								for (TipoEquipamento tipoEquipamento2 : listaTipoEquipamento) {
 									System.out.println("[ " + tipoEquipamento2.getIdTipoEquipamento() + " ] "
 											+ tipoEquipamento2.getTipoEquiNome());
-									// count++;
 								}
 								System.out.println("[ 0 ] Para sair");
 								System.out.println("Digite o numero do Tipo desse Equipamento: ");
@@ -99,7 +94,6 @@ public class Main {
 
 									if (equipamentoDAO.addEquipamento(equipamento)) {
 										System.out.println("cadastrado com sucesso!");
-										// break;
 									} else {
 										System.out.println("Falha ao tenter realizar cadastrado");
 									}
@@ -118,10 +112,7 @@ public class Main {
 						case 3:
 
 							ArrayList<PostoDeSaude> listaPostoDeSaude = postoDeSaudeDAO.getListPostoDeSaude();
-
-							// falta a lista posto postoDeSaudeDAO.;
 							if (listaPostoDeSaude.size() > 0) {
-
 								System.out.println("Listas dos Postos de Saúde:\n ");
 								for (PostoDeSaude postoDeSaude : listaPostoDeSaude) {
 									Endereco endereco = enderecoDAO.getEnderecoById(postoDeSaude.getIdEndereco());
@@ -166,15 +157,14 @@ public class Main {
 										int idEndereco = enderecoDAO.getIdByObjeto(end);
 
 										if (idEndereco > 0) {
-											Paciente paciente = new Paciente(pacNome, idEndereco, idPosto);
-
+											Paciente paciente = new Paciente(pacNome,idPosto,idEndereco);
 											if (pacienteDAO.addPaciente(paciente)) {
 												System.out.println("cadastrado com sucesso!");
 											} else {
 												System.out.println("Falha ao tenter realizar cadastrado");
 											}
 										} else {
-											System.out.println("Erro ao cadastrar endereço. Tente novamente.");
+											System.out.println("Erro ao cadastrar 1 endereço. Tente novamente.");
 										}
 									} else {
 										System.out.println("Erro ao cadastrar endereço. Tente novamente.");

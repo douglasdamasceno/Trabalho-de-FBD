@@ -86,8 +86,6 @@ public class PacienteDAO {
 
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-
-			// seta os valores
 			preparedStatement.setInt(1, idPaciente);
 
 			int qtdRowsAffected = preparedStatement.executeUpdate();
@@ -153,8 +151,8 @@ public class PacienteDAO {
 
 			preparedStatement.setString(1, paciente.getPacNome());
 			preparedStatement.setInt(2, paciente.getIdPosto());
-			// preparedStatement.setInt(3, paciente.getIdEndereco());
-			preparedStatement.setInt(3, paciente.getIdPaciente());
+			preparedStatement.setInt(3, endereco.getIdEndereco());
+			preparedStatement.setInt(4, paciente.getIdPaciente());
 			int qtdRowAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
 
@@ -175,7 +173,36 @@ public class PacienteDAO {
 
 		return false;
 	}
-
+	
+	public boolean alterarPacNome(String pacNome) {
+		String comandoSQL = "UPDATE paciente SET pacNome= ? WHERE idPaciente = ?";
+		this.connection = new Conexao().getConnection();
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
+			preparedStatement.setString(1, pacNome);
+			
+			int qtdRowAffected = preparedStatement.executeUpdate();
+			preparedStatement.close();
+			if(qtdRowAffected>0) 
+				return true;
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
+	
+	
 	public int getIdMax() {
 		String comandoSQL = "select max(idPaciente) from Paciente";
 		conecte();
