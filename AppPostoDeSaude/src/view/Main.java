@@ -341,14 +341,24 @@ public class Main {
 
 						switch (altComando) {
 						case 1:
-							
-							
 							System.out.println("Degeja alterar o Nome do Tipo de Equipamento cadastrado?");
-							System.out.println("[ 1 ] Para sim [ 2 ] para não");
+							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
+							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							
-							
-							
-							break;
+							if(listaTipoEquipamento.size()>0) {
+								System.out.println("Digite o id do Tipo de Equipamento que será alterado!");
+								int idTipoEqui = scanner.nextInt();
+								System.out.println("Digite o novo nome do Tipo de Equipamento cadastrado?");
+								String tipoEquiNome = scannerStrings.nextLine();
+								TipoEquipamento tipoEquipamento = new TipoEquipamento(idTipoEqui,tipoEquiNome);
+								if(tipoEquipamentoDAO.addTipoEquipamento(tipoEquipamento)) {
+										System.out.println("Nome do Tipo de Equipamento Alterado com sucesso!");
+								}else {
+										System.out.println("Tipo de Equipamento não Alterado");
+								}
+							}else {
+								System.out.println("Não nenhum tipo de Equipamento cadastrado!");
+							}
 						case 2:
 
 							break;
@@ -388,7 +398,6 @@ public class Main {
 
 						switch (remComando) {
 						case 1:
-							// Talvez fazer trigger para excluir suas dependencias
 							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
 							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							if (listaTipoEquipamento.size() > 0) {
@@ -422,7 +431,6 @@ public class Main {
 
 							break;
 						case 2:
-							// Talvez fazer trigger para excluir suas dependencias
 							ArrayList<Equipamento> listaEquipamentos = new ArrayList<Equipamento>();
 							listaEquipamentos = equipamentoDAO.getListEquipamento();
 							System.out.println("lista de Equipamentos cadastrados");

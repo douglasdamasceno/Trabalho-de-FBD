@@ -139,16 +139,11 @@ public class PacienteDAO {
 	}
 
 	public boolean alterarPaciente(Paciente paciente, Endereco endereco) {
-
 		EnderecoDAO enderecoDAO = new EnderecoDAO();
-
 		String comandoSQL = "UPDATE paciente set pacNome= ?,idPosto=? where idPaciente=?";
-
 		this.connection = new Conexao().getConnection();
-
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-
 			preparedStatement.setString(1, paciente.getPacNome());
 			preparedStatement.setInt(2, paciente.getIdPosto());
 			preparedStatement.setInt(3, endereco.getIdEndereco());
@@ -161,7 +156,6 @@ public class PacienteDAO {
 					return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
@@ -179,22 +173,18 @@ public class PacienteDAO {
 		this.connection = new Conexao().getConnection();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-			preparedStatement.setString(1, pacNome);
-			
+			preparedStatement.setString(1, pacNome);			
 			int qtdRowAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
 			if(qtdRowAffected>0) 
 				return true;
-			
-			
+	
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -206,18 +196,13 @@ public class PacienteDAO {
 	public int getIdMax() {
 		String comandoSQL = "select max(idPaciente) from Paciente";
 		conecte();
-
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-
 			ResultSet rs = preparedStatement.executeQuery();
 			rs.next();
 			int idMaximo = rs.getInt("max");
-
 			preparedStatement.close();
-
 			return idMaximo;
-
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		} finally {
@@ -227,7 +212,6 @@ public class PacienteDAO {
 				e2.printStackTrace();
 			}
 		}
-
 		return -1;
 	}
 
