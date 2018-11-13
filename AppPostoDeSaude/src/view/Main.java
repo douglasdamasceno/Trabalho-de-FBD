@@ -73,7 +73,6 @@ public class Main {
 						case 2:
 
 							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
-
 							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							if (listaTipoEquipamento.size() > 0) {
 								System.out.println("Escolha qual é o Tipo desse Equipamento: ");
@@ -102,8 +101,6 @@ public class Main {
 								} else {
 									System.out.println("Digite apenas números que estão entre as opções.");
 								}
-
-								// break;
 							} else {
 								System.out.println("è preciso cadastrar primeiro um tipo de Equipamento!");
 							}
@@ -221,7 +218,6 @@ public class Main {
 
 							break;
 						case 5:
-							// int vetorIds[] = equipamentoDoPostoDAO.getIdByObjeto(equiDoPosto);
 							ArrayList<PostoDeSaude> postos = postoDeSaudeDAO.getListPostoDeSaude();
 
 							if (postos.size() == 0) {
@@ -323,6 +319,7 @@ public class Main {
 
 						default:
 							System.out.println("Comando Inválido!!! Tente um novo comando");
+							cadLoop = false;
 							break;
 						}
 					}
