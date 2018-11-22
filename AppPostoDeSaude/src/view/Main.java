@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import org.json.simple.JSONObject;
+
 import dao.*;
 import model.*;
 
@@ -20,6 +22,17 @@ public class Main {
 		PostoDeSaudeDAO postoDeSaudeDAO = new PostoDeSaudeDAO();
 		EquipamentoDoPostoDAO equipamentoDoPostoDAO = new EquipamentoDoPostoDAO();
 
+		ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
+		listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
+		ArrayList<Equipamento>listaEquipamentos = new ArrayList<Equipamento>();
+		listaEquipamentos = equipamentoDAO.getListEquipamento();
+		ArrayList<PostoDeSaude> listaPostoDeSaudes = new ArrayList<PostoDeSaude>();
+		listaPostoDeSaudes = postoDeSaudeDAO.getListPostoDeSaude();
+
+		ArrayList<Paciente> listaPacientes = new ArrayList<Paciente>();
+		listaPacientes = pacienteDAO.getListPaciente();
+		
+		
 		System.out.println("Digite a operação:");
 		scanner = new Scanner(System.in);
 		scannerStrings = new Scanner(System.in);
@@ -29,7 +42,7 @@ public class Main {
 			boolean loop = true;
 			while (loop) {
 
-				System.out.println("Bem vindo ao portal saude com transparencia");
+				System.out.println("Portal Saúde com transparencia");
 				System.out.println("Digite:");
 				System.out.println("[ 1 ] Realizar Cadastros");
 				System.out.println("[ 2 ] Realizar Alterações");
@@ -44,7 +57,7 @@ public class Main {
 
 					boolean cadLoop = true;
 					while (cadLoop) {
-
+						System.out.println("Digite :");
 						System.out.println("[ 1 ] Realizar Cadastro de Tipo de Equipamento");
 						System.out.println("[ 2 ] Realizar Cadastro de Equipamentos");
 						System.out.println("[ 3 ] Realizar Cadastro de Pacientes");
@@ -71,9 +84,6 @@ public class Main {
 
 							break;
 						case 2:
-
-							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
-							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							if (listaTipoEquipamento.size() > 0) {
 								System.out.println("Escolha qual é o Tipo desse Equipamento: ");
 
@@ -108,10 +118,9 @@ public class Main {
 							break;
 						case 3:
 
-							ArrayList<PostoDeSaude> listaPostoDeSaude = postoDeSaudeDAO.getListPostoDeSaude();
-							if (listaPostoDeSaude.size() > 0) {
+							if (listaPostoDeSaudes.size() > 0) {
 								System.out.println("Listas dos Postos de Saúde:\n ");
-								for (PostoDeSaude postoDeSaude : listaPostoDeSaude) {
+								for (PostoDeSaude postoDeSaude : listaPostoDeSaudes) {
 									Endereco endereco = enderecoDAO.getEnderecoById(postoDeSaude.getIdEndereco());
 									System.out.print("[ " + postoDeSaude.getIdPosto() + " ] " + "Nome do Posto: "
 											+ postoDeSaude.getpNome());
@@ -329,7 +338,7 @@ public class Main {
 
 					boolean altLoop = true;
 					while (altLoop) {
-
+						System.out.println("Digite :");	
 						System.out.println("[ 1 ] Realizar Alteração de Tipo de Equipamento");
 						System.out.println("[ 2 ] Realizar Alteração de Equipamentos");
 						System.out.println("[ 3 ] Realizar Alteração de Pacientes");
@@ -341,17 +350,14 @@ public class Main {
 
 						switch (altComando) {
 						case 1:
-							System.out.println("Degeja alterar o Nome do Tipo de Equipamento cadastrado?");
-							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
-							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							
+						
 							if(listaTipoEquipamento.size()>0) {
 								System.out.println("Digite o id do Tipo de Equipamento que será alterado!");
-								int idTipoEqui = scanner.nextInt();
+								int idTipoEquipamento = scanner.nextInt();
 								System.out.println("Digite o novo nome do Tipo de Equipamento cadastrado?");
 								String tipoEquiNome = scannerStrings.nextLine();
-								TipoEquipamento tipoEquipamento = new TipoEquipamento(idTipoEqui,tipoEquiNome);
-								if(tipoEquipamentoDAO.addTipoEquipamento(tipoEquipamento)) {
+								if(tipoEquipamentoDAO.atualizarTipoEquipamento(idTipoEquipamento, tipoEquiNome)) {
 										System.out.println("Nome do Tipo de Equipamento Alterado com sucesso!");
 								}else {
 										System.out.println("Tipo de Equipamento não Alterado");
@@ -360,10 +366,184 @@ public class Main {
 								System.out.println("Não nenhum tipo de Equipamento cadastrado!");
 							}
 						case 2:
-
+							boolean equipamentoLoop = true;
+							while(equipamentoLoop) {
+								System.out.println("Digite :");
+								System.out.println("[ 1 ] Alterar todo o Equipamento");
+								System.out.println("[ 2 ] Alterar o tipo do Equipamentos");
+								System.out.println("[ 3 ] Alterar a descrição do Equipamento");
+								System.out.println("[ 0 ] Sair da Aba Alterar Equipamento");
+								int equipamentoComando =  scanner.nextInt();;
+								switch (equipamentoComando) {
+								case 1:
+									if(listaTipoEquipamento.size()>0 && listaEquipamentos.size()>0) {
+//										for (Equipamento equipamento : listaEquipamentos) {
+//											System.out.println("["+equipamento.getIdEquipamento() +"] Nome :" + equipamento.getDescricao());
+//										}
+										System.out.println("Digite as novas informações do Equipamento!");
+										System.out.println("Digite o id do Equipamento que será alterado");
+										int idEquipamento = scanner.nextInt();
+										System.out.println("Digite o numero do Tipo do Equipamento");
+										for (TipoEquipamento tipoEquipamento : listaTipoEquipamento) {
+											System.out.println("["+tipoEquipamento.getIdTipoEquipamento()+"] Nome: "+ tipoEquipamento.getTipoEquiNome());
+										}
+										int idTipoEquipamento = scanner.nextInt();
+										System.out.println("Digite a nova descrição do Equipamento");
+										String descricao = scannerStrings.nextLine();
+										
+										Equipamento equipamento = new Equipamento(idEquipamento,descricao, idTipoEquipamento);
+										if(equipamentoDAO.alterarEquipamento(equipamento)) {
+											System.out.println("Equipamento Alterado com Sucesso!!");
+										}else {
+											System.out.println("Erro ao tentar alterar o Equipamento!");
+										}
+										
+									}else {
+										System.out.println("Não há equipamento cadastrado no sistema");
+									}
+									break;
+								case 2:
+									if(listaTipoEquipamento.size()>0 && listaEquipamentos.size()>0) {
+										System.out.println("Digite o id do Equipamento que será alterado");
+										int idEquipamento = scanner.nextInt();
+										System.out.println("Digite o numero do Tipo do Equipamento");
+										for (TipoEquipamento tipoEquipamento : listaTipoEquipamento) {
+											System.out.println("["+tipoEquipamento.getIdTipoEquipamento()+"] Nome: "+ tipoEquipamento.getTipoEquiNome());
+										}
+										int idTipoEquipamento = scanner.nextInt();
+										
+										if(equipamentoDAO.alterarTipoDoEquipamento(idEquipamento, idTipoEquipamento)) {
+											System.out.println("Tipo do Equipamento Alterado com Sucesso!!");
+										}else {
+											System.out.println("Erro ao tentar alterar o id do Tipo do Equipamento!");
+										}
+										
+									}else {
+										System.out.println("Não há equipamento cadastrado no sistema");
+									}		
+									break;
+								case 3:
+									if(listaTipoEquipamento.size()>0 && listaEquipamentos.size()>0) {
+										System.out.println("Digite o id do Equipamento que será alterado");
+										int idEquipamento = scanner.nextInt();
+										System.out.println("Digite a nova descrição do Equipamento");
+										String descricao = scannerStrings.nextLine();
+										
+										if(equipamentoDAO.alterarDescricao(idEquipamento, descricao)) {
+											System.out.println("Descrição do Equipamento Alterado com Sucesso!!");
+										}else {
+											System.out.println("Erro ao tentar alterar a descrição do Equipamento!");
+										}
+										
+									}else {
+										System.out.println("Não há equipamento cadastrado no sistema");
+									}		
+									break;	
+								case 0:
+									equipamentoLoop = false;
+									break;
+		
+								default:
+									System.out.println("Comando Inválido!!! Tente um novo comando");
+									break;
+								}
+							}	
 							break;
 						case 3:
+							boolean pacienteLoop = true;
+							while(pacienteLoop) {
+								System.out.println("Digite :");
+								System.out.println("[ 1 ] Alterar todo o Paciente");
+								System.out.println("[ 2 ] Alterar o Nome do Paciente");
+								System.out.println("[ 3 ] Alterar o Posto de saúde do Paciente");
+								System.out.println("[ 4 ] Alterar o endereco do Paciente");								
+								System.out.println("[ 0 ] Sair da Aba Alterar Paciente");
+								int pacienteComando =  scanner.nextInt();
+								switch (pacienteComando) {
+								case 1:
+									if(listaPostoDeSaudes.size()>0) {
+										System.out.println("Escolha o novo Posto de saúde do Paciente:");
+										System.out.println("Listas dos Postos de Saúde:");
+										for (PostoDeSaude postoDeSaude : listaPostoDeSaudes) {
+											Endereco endereco = enderecoDAO.getEnderecoById(postoDeSaude.getIdEndereco());
+											System.out.print("[ " + postoDeSaude.getIdPosto() + " ] " + "Nome do Posto: "
+													+ postoDeSaude.getpNome());
+											System.out.println(" Rua: " + endereco.getRua() + " Numero: " + endereco.getNumero()
+													+ " Bairro: " + endereco.getBairro() + " CEP: " + endereco.getCep()
+													+ " Estado: " + endereco.getEstado());
+										}
+										System.out.println("[ 0 ] Para sair");
 
+										System.out.println("Escolha o numero do Posto do Paciente:\n ");
+										int idPosto = scanner.nextInt();
+
+										if (idPosto > 0 && idPosto <= postoDeSaudeDAO.getIdMax()) {
+
+											System.out.println("Digite o id do Paciente que será alterado:\n ");
+											int idPaciente = scanner.nextInt();
+											System.out.println("Digite o novo nome do Paciente:\n ");
+											String pacNome = scannerStrings.nextLine();
+
+											int numero;
+
+											String rua, bairro, cep, estado;
+
+											System.out.println("Digite o nome da Rua: ");
+											rua = scannerStrings.nextLine();
+
+											System.out.println("Digite o número da Casa: ");
+											numero = scanner.nextInt();
+
+											System.out.println("Digite o nome do Bairro: ");
+											bairro = scannerStrings.nextLine();
+
+											System.out.println("Digite o número do Cep: ");
+											cep = scannerStrings.nextLine();
+											System.out.println("Digite o nome do Estado: ");
+											estado = scannerStrings.nextLine();
+
+											Endereco endereco = new Endereco(rua, numero, bairro, cep, estado);
+//											if (enderecoDAO.alterarEndereco(endereco)) {
+												int idEndereco = enderecoDAO.getIdByObjeto(endereco);
+
+												if (idEndereco > 0) {
+													Paciente paciente = new Paciente(idPaciente,pacNome,idPosto,idEndereco);
+													if (pacienteDAO.alterarPaciente(paciente, endereco)) {
+														System.out.println("Paciente Alterado com sucesso!");
+													} else {
+														System.out.println("Falha ao tenter ao tentar Alterar");
+													}
+//												} else {
+//													System.out.println("Erro ao cadastrar 1 endereço. Tente novamente.");
+//												}
+											} else {
+												System.out.println("Erro ao alterar endereço. Tente novamente.");
+											}
+
+										} else if (idPosto == 0) {
+											break;
+										} else {
+											System.out.println("Digite apenas números que estão entre as opções.");
+										}
+
+
+									}
+									break;
+								case 2:
+									
+									break;
+								case 3:
+									break;
+								case 4:
+									break;
+								case 0:
+									pacienteLoop = false;
+									break;
+								default:
+									break;
+								}
+								
+							}
 							break;
 						case 4:
 
@@ -398,8 +578,6 @@ public class Main {
 
 						switch (remComando) {
 						case 1:
-							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
-							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							if (listaTipoEquipamento.size() > 0) {
 								System.out.println("Escolha qual é o Tipo desse Equipamento: ");
 
@@ -431,10 +609,8 @@ public class Main {
 
 							break;
 						case 2:
-							ArrayList<Equipamento> listaEquipamentos = new ArrayList<Equipamento>();
-							listaEquipamentos = equipamentoDAO.getListEquipamento();
-							System.out.println("lista de Equipamentos cadastrados");
 							if (listaEquipamentos.size() > 0) {
+								System.out.println("lista de Equipamentos cadastrados");
 								for (Equipamento equipamento2 : listaEquipamentos) {
 									System.out.println("[ " + equipamento2.getIdEquipamento() + " ] Descrição = "
 											+ equipamento2.getDescricao());
@@ -461,9 +637,6 @@ public class Main {
 
 							break;
 						case 3:
-
-							ArrayList<Paciente> listaPacientes = new ArrayList<Paciente>();
-							listaPacientes = pacienteDAO.getListPaciente();
 							if (listaPacientes.size() > 0) {
 
 								System.out.println("Lista dos Pacientes cadastrado no sistema!");
@@ -632,9 +805,6 @@ public class Main {
 
 						switch (conComando) {
 						case 1:
-
-							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
-							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							if (listaTipoEquipamento.size() > 0) {
 								System.out.println("Escolha qual é o Tipo desse Equipamento: ");
 
@@ -652,16 +822,14 @@ public class Main {
 								}else {
 									System.out.println("insira apenas os numeros listarados");
 								}
-							} else {
-								System.out.println("Nenhum Tipo de equipamento cadastrado.");
+							}else {
+								System.out.println("è necessario tem Tipo de Equipamento cadastrado");
 							}
 
 							break;
 						case 2:
-							ArrayList<Equipamento> listaEquipamentos = new ArrayList<Equipamento>();
-							listaEquipamentos = equipamentoDAO.getListEquipamento();
-							System.out.println("lista de Equipamentos cadastrados");
 							if (listaEquipamentos.size() > 0) {
+								System.out.println("lista de Equipamentos cadastrados");
 								for (Equipamento equipamento2 : listaEquipamentos) {
 									TipoEquipamento tipo = tipoEquipamentoDAO.getTipoEquipamentoById(equipamento2.getIdTipoEquipamento());
 									System.out.println("[ " + equipamento2.getIdEquipamento() + " ] Tipo: "+ tipo.getTipoEquiNome() +" Descrição: "
@@ -697,8 +865,6 @@ public class Main {
 								int escolhaPosto = scanner.nextInt();
 								if (escolhaPosto > 0 && escolhaPosto <= postoDeSaudeDAO.getIdMax()) {
 									
-									ArrayList<Paciente> listaPacientes = new ArrayList<Paciente>();
-									listaPacientes = pacienteDAO.getListPaciente();
 									if (listaPacientes.size() > 0) {
 
 										System.out.println("Lista dos Pacientes cadastrado no sistema!");
@@ -759,12 +925,11 @@ public class Main {
 							
 							break;
 						case 5:
-							ArrayList<PostoDeSaude> listaPostosDeSaude = postoDeSaudeDAO.getListPostoDeSaude();
-
-							if (listaPostosDeSaude.size() > 0) {
+							
+							if (listaPostoDeSaudes.size() > 0) {
 								System.out.println("Selecione o Posto degejado: ");
 
-								for (PostoDeSaude postoDeSaude : listaPostosDeSaude) {
+								for (PostoDeSaude postoDeSaude : listaPostoDeSaudes) {
 									System.out.println("[ " + postoDeSaude.getIdPosto() + " ] " + "Nome do Posto: "
 											+ postoDeSaude.getpNome());
 
@@ -835,6 +1000,7 @@ public class Main {
 					break;
 				case 0:
 					loop = false;
+					System.out.println("Sistema finalizado!");
 					break;
 
 				default:
@@ -850,4 +1016,7 @@ public class Main {
 		}
 
 	}
+
+	PacienteDAO pacienteDAO = new PacienteDAO();
+			
 }

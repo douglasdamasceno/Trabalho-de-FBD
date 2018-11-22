@@ -32,6 +32,8 @@ public class Equipamento {
 		this.idTipoEquipamento = idTipoEquipamento;
 	}
 
+	
+
 	public String getDescricao() {
 		return descricao;
 	}
@@ -39,5 +41,9 @@ public class Equipamento {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
+	@Override
+	public String toString() {
+		return "Equipamento [idEquipamento=" + idEquipamento + ", idTipoEquipamento=" + idTipoEquipamento
+				+ ", descricao=" + descricao + "]";
+	}
 }

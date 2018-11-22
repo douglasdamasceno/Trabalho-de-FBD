@@ -60,7 +60,6 @@ public class PostoDeSaudeDAO {
 
 		String comadoSQL = "delete from PostoDeSaude where idPosto = ?";
 		conecte();
-
 		try {
 
 			PreparedStatement preparedStatement = conexao.prepareStatement(comadoSQL);

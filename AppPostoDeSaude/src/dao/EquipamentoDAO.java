@@ -166,12 +166,13 @@ public class EquipamentoDAO {
 		return false;
 	}
 	
-	public boolean alterarTipoDoEquipamento(int tipoEquipamento) {
+	public boolean alterarTipoDoEquipamento(int idEquipamento,int idTipoEquipamento) {
 		String comandoSQL = "UPDATE equipamento SET idTipoEquipamento=? WHERE idEquipamento =? ;";
 		this.connection = new Conexao().getConnection();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-			preparedStatement.setInt(1, tipoEquipamento);
+			preparedStatement.setInt(1, idTipoEquipamento);
+			preparedStatement.setInt(2, idEquipamento);
 			
 			int qtdRowAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -191,12 +192,14 @@ public class EquipamentoDAO {
 		return false;
 	}
 	
-	public boolean alterarDescricao(String descricao) {
+	public boolean alterarDescricao(int idEquipamento,String descricao) {
 		String comandoSQL = "UPDATE equipamento SET descricao = ? WHERE idEquipamento =?";
 		this.connection = new Conexao().getConnection();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
 			preparedStatement.setString(1, descricao);
+			preparedStatement.setInt(2, idEquipamento);
+			
 			int qtdRowAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
 			if(qtdRowAffected>0)
@@ -216,40 +219,6 @@ public class EquipamentoDAO {
 		return false;
 	}
 	
-	
-//	public ArrayList<Equipamento> getListEquipamentosQueNaoEstaoNoPosto(int idEquipamento, int idEquipamentoDoPosto) {
-//		String comandoSQL = "select * from Equipamento E, EquipamentoDoPosto EP where ? != ?";
-//		ArrayList<Equipamento> equipamentosQueNaoEstaoNoPosto = new ArrayList<>();
-//		conecte();
-//
-//		try {
-//
-//			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-//
-//			preparedStatement.setInt(1, idEquipamento);
-//			preparedStatement.setInt(2, idEquipamentoDoPosto);
-//
-//			ResultSet rs = preparedStatement.executeQuery();
-//			while (rs.next()) {
-//
-//				Equipamento equipamento = new Equipamento(rs.getInt("idEquipamento"), rs.getString("descricao"),
-//						rs.getInt("idTipoEquipamento"));
-//				equipamentosQueNaoEstaoNoPosto.add(equipamento);
-//			}
-//
-//			preparedStatement.close();
-//		} catch (SQLException e) {
-//			System.err.println(e.getMessage());
-//		} finally {
-//			try {
-//				this.connection.close();
-//			} catch (Exception e2) {
-//				e2.printStackTrace();
-//			}
-//		}
-//		return equipamentosQueNaoEstaoNoPosto;
-//	}
-
 	public int getIdMax() {
 		String comandoSQL = "select max(idEquipamento) from Equipamento";
 		conecte();

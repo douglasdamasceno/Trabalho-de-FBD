@@ -130,7 +130,7 @@ public class TipoEquipamentoDAO {
 		return null;
 	}
 
-	public boolean atualizarTipoEquipamento(TipoEquipamento tipoEquipamento) {
+	public boolean atualizarTipoEquipamento(int idTipoEquipamento,String tipoEquiNome) {
 		String comandoSQL = "UPDATE tipoequipamento set tipoEquiNome= ? where idtipoequipamento= ?;";
 
 		this.connection = new Conexao().getConnection();
@@ -138,8 +138,8 @@ public class TipoEquipamentoDAO {
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
 
-			preparedStatement.setString(1, tipoEquipamento.getTipoEquiNome());
-			preparedStatement.setInt(2, tipoEquipamento.getIdTipoEquipamento());
+			preparedStatement.setString(1,tipoEquiNome);
+			preparedStatement.setInt(2, idTipoEquipamento);
 
 			int qtdRowAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();

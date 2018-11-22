@@ -71,4 +71,10 @@ public class EquipamentoDoPosto {
 		this.idEquiDoPosto = idEquiDoPosto;
 	}
 
+	@Override
+	public String toString() {
+		return "EquipamentoDoPosto [idEquiDoPosto=" + idEquiDoPosto + ", idPosto=" + idPosto + ", idEquipamento="
+				+ idEquipamento + ", qtdEquipamento=" + qtdEquipamento + ", dataDeEntrega=" + dataDeEntrega + "]";
+	}
+	
 }

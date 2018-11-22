@@ -140,7 +140,7 @@ public class PacienteDAO {
 
 	public boolean alterarPaciente(Paciente paciente, Endereco endereco) {
 		EnderecoDAO enderecoDAO = new EnderecoDAO();
-		String comandoSQL = "UPDATE paciente set pacNome= ?,idPosto=? where idPaciente=?";
+		String comandoSQL = "UPDATE paciente set pacNome= ?,idPosto=? ,idendereco=? where idPaciente=?";
 		this.connection = new Conexao().getConnection();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
@@ -152,7 +152,7 @@ public class PacienteDAO {
 			preparedStatement.close();
 
 			if (qtdRowAffected > 0) {
-				if (enderecoDAO.adicionarEndereco(endereco))
+				if (enderecoDAO.alterarEndereco(endereco))
 					return true;
 			}
 		} catch (SQLException e) {
@@ -168,12 +168,13 @@ public class PacienteDAO {
 		return false;
 	}
 	
-	public boolean alterarPacNome(String pacNome) {
+	public boolean alterarPacNome(int idPaciente,String pacNome) {
 		String comandoSQL = "UPDATE paciente SET pacNome= ? WHERE idPaciente = ?";
 		this.connection = new Conexao().getConnection();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-			preparedStatement.setString(1, pacNome);			
+			preparedStatement.setString(1, pacNome);
+			preparedStatement.setInt(2, idPaciente);
 			int qtdRowAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
 			if(qtdRowAffected>0) 
@@ -190,7 +191,61 @@ public class PacienteDAO {
 		}
 		return false;
 	}
+	public boolean alterarIdPosto(int idPaciente,int idPosto) {
+		String comandoSQL = "UPDATE paciente SET idPosto= ? WHERE idPaciente = ?";
+		this.connection = new Conexao().getConnection();
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
+			preparedStatement.setInt(1, idPosto);
+			preparedStatement.setInt(2, idPaciente);
+			int qtdRowAffected = preparedStatement.executeUpdate();
+			preparedStatement.close();
+			if(qtdRowAffected>0) 
+				return true;
 	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	public boolean alterarEndereco(int idPaciente,Endereco endereco) {
+		EnderecoDAO enderecoDAO = new EnderecoDAO();
+
+		String comandoSQL = "select idEndereco from paciente,endereco where idPaciente = ?";
+		this.connection = new Conexao().getConnection();
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
+//			preparedStatement.setInt(1, posto.getIdEndereco());
+//			preparedStatement.setString(2, posto.getpNome());
+//			preparedStatement.setInt(3, posto.getIdPosto());
+
+			int qtdRowsAffected = preparedStatement.executeUpdate();
+			preparedStatement.close();
+
+			if (qtdRowsAffected > 0) {
+				if (enderecoDAO.alterarEndereco(endereco)) {
+					return true;
+				}
+			}
+
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				this.connection.close();;
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return false;
+	}
+
 	
 	
 	public int getIdMax() {

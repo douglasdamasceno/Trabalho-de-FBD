@@ -151,11 +151,8 @@ public class EnderecoDAO {
 	public boolean alterarEndereco(Endereco end) {
 		String comandoSQL = "update Endereco set rua = ?, numero = ?, bairro = ?, cep = ?, estado = ? where idEndereco = ?";
 		conecte();
-
 		try {
-
 			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
-
 			preparedStatement.setString(1, end.getRua());
 			preparedStatement.setInt(2, end.getNumero());
 			preparedStatement.setString(3, end.getBairro());

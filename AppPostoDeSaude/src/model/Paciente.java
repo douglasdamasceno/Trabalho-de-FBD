@@ -50,6 +50,12 @@ public class Paciente {
 	public void setIdPosto(int idPosto) {
 		this.idPosto = idPosto;
 	}
+
+	@Override
+	public String toString() {
+		return "Paciente [idPaciente=" + idPaciente + ", pacNome=" + pacNome + ", idEndereco=" + idEndereco
+				+ ", idPosto=" + idPosto + "]";
+	}
 	
 	
 }
