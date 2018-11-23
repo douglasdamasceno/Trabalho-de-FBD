@@ -22,34 +22,16 @@ public class Main {
 		PostoDeSaudeDAO postoDeSaudeDAO = new PostoDeSaudeDAO();
 		EquipamentoDoPostoDAO equipamentoDoPostoDAO = new EquipamentoDoPostoDAO();
 
-		ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
-		listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
-		ArrayList<Equipamento>listaEquipamentos = new ArrayList<Equipamento>();
-		listaEquipamentos = equipamentoDAO.getListEquipamento();
-		ArrayList<PostoDeSaude> listaPostoDeSaudes = new ArrayList<PostoDeSaude>();
-		listaPostoDeSaudes = postoDeSaudeDAO.getListPostoDeSaude();
-
-		ArrayList<Paciente> listaPacientes = new ArrayList<Paciente>();
-		listaPacientes = pacienteDAO.getListPaciente();
-		
-		
 		System.out.println("Digite a operação:");
 		scanner = new Scanner(System.in);
 		scannerStrings = new Scanner(System.in);
 
-		try {
+		
 
 			boolean loop = true;
 			while (loop) {
-
-				System.out.println("Portal Saúde com transparencia");
-				System.out.println("Digite:");
-				System.out.println("[ 1 ] Realizar Cadastros");
-				System.out.println("[ 2 ] Realizar Alterações");
-				System.out.println("[ 3 ] Realizar Remoções");
-				System.out.println("[ 4 ] Realizar Consultas");
-				System.out.println("[ 0 ] Sair do Sistema");
-
+				//try {
+				menuInicial();
 				int comando = scanner.nextInt();
 
 				switch (comando) {
@@ -57,14 +39,7 @@ public class Main {
 
 					boolean cadLoop = true;
 					while (cadLoop) {
-						System.out.println("Digite :");
-						System.out.println("[ 1 ] Realizar Cadastro de Tipo de Equipamento");
-						System.out.println("[ 2 ] Realizar Cadastro de Equipamentos");
-						System.out.println("[ 3 ] Realizar Cadastro de Pacientes");
-						System.out.println("[ 4 ] Realizar Cadastro de Posto de Saúde");
-						System.out.println("[ 5 ] Realizar Cadastro de Equipamentos do Posto");
-						System.out.println("[ 0 ] Sair da Aba Cadastro");
-
+						meuCadastro();
 						int cadComando = scanner.nextInt();
 
 						switch (cadComando) {
@@ -84,6 +59,9 @@ public class Main {
 
 							break;
 						case 2:
+
+							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
+							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							if (listaTipoEquipamento.size() > 0) {
 								System.out.println("Escolha qual é o Tipo desse Equipamento: ");
 
@@ -117,6 +95,8 @@ public class Main {
 
 							break;
 						case 3:
+							ArrayList<PostoDeSaude> listaPostoDeSaudes = new ArrayList<PostoDeSaude>();
+							listaPostoDeSaudes = postoDeSaudeDAO.getListPostoDeSaude();
 
 							if (listaPostoDeSaudes.size() > 0) {
 								System.out.println("Listas dos Postos de Saúde:\n ");
@@ -206,8 +186,6 @@ public class Main {
 
 							System.out.println("Digite o número do Cep: ");
 							cep = scannerStrings.nextLine();
-							// System.out.println("Digite o nome da Cidade: ");
-							// cidade = scanner.nextLine();
 							System.out.println("Digite o nome do Estado: ");
 							estado = scannerStrings.nextLine();
 
@@ -256,21 +234,7 @@ public class Main {
 										ArrayList<Equipamento> equipamentos = equipamentoDAO.getListEquipamento();
 										ArrayList<TipoEquipamento> tipoEquipamentos = tipoEquipamentoDAO
 												.getListTipoEquipamento();
-										// ArrayList<EquipamentoDoPosto> equipamentosDoPosto =
-										// equipamentoDoPostoDAO.getListEquipamentoDoPosto(idPosto);
-
-										// ArrayList<Equipamento> equipamentosQueNaoEstaoNoPosto = new ArrayList<>();
-										//
-										// for (EquipamentoDoPosto equipamentoDoPosto : equipamentosDoPosto) {
-										// for (Equipamento equipamento : equipamentos) {
-										// equipamentosQueNaoEstaoNoPosto =
-										// equipamentoDAO.getListEquipamentosQueNaoEstaoNoPosto(equipamento.getIdEquipamento(),
-										// equipamentoDoPosto.getIdPosto());
-										// }
-										//
-										//
-										// }
-
+								
 										for (Equipamento equipamento : equipamentos) {
 											System.out.print("[ " + equipamento.getIdEquipamento() + " ] " + "Tipo: ");
 
@@ -310,7 +274,6 @@ public class Main {
 										} else {
 											System.out.println("Digite apenas números que estão entre as opções.");
 										}
-
 									}
 
 								} else if (escolhaPosto == 0) {
@@ -318,7 +281,6 @@ public class Main {
 								} else {
 									System.out.println("Selecione um número válido!!!");
 								}
-
 							}
 
 							break;
@@ -351,10 +313,18 @@ public class Main {
 						switch (altComando) {
 						case 1:
 							
-						
+							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
+							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							if(listaTipoEquipamento.size()>0) {
 								System.out.println("Digite o id do Tipo de Equipamento que será alterado!");
+								for (TipoEquipamento tipoEquipamento : listaTipoEquipamento) {
+									System.out.println("["+tipoEquipamento.getIdTipoEquipamento()+"] Nome: "+ tipoEquipamento.getTipoEquiNome());
+								}
+								System.out.println("[ 0 ] para sair");
 								int idTipoEquipamento = scanner.nextInt();
+								if(idTipoEquipamento==0) {
+									break;
+								}
 								System.out.println("Digite o novo nome do Tipo de Equipamento cadastrado?");
 								String tipoEquiNome = scannerStrings.nextLine();
 								if(tipoEquipamentoDAO.atualizarTipoEquipamento(idTipoEquipamento, tipoEquiNome)) {
@@ -376,15 +346,24 @@ public class Main {
 								int equipamentoComando =  scanner.nextInt();;
 								switch (equipamentoComando) {
 								case 1:
-									if(listaTipoEquipamento.size()>0 && listaEquipamentos.size()>0) {
-//										for (Equipamento equipamento : listaEquipamentos) {
-//											System.out.println("["+equipamento.getIdEquipamento() +"] Nome :" + equipamento.getDescricao());
-//										}
-										System.out.println("Digite as novas informações do Equipamento!");
+									ArrayList<TipoEquipamento> listaTipoEquipamentos = new ArrayList<TipoEquipamento>();
+									listaTipoEquipamentos = tipoEquipamentoDAO.getListTipoEquipamento();
+									ArrayList<Equipamento>listaEquipamentos111 = new ArrayList<Equipamento>();
+									listaEquipamentos111 = equipamentoDAO.getListEquipamento();
+
+									if(listaTipoEquipamentos.size()>0 && listaEquipamentos111.size()>0) {
 										System.out.println("Digite o id do Equipamento que será alterado");
+										for (Equipamento equipamento : listaEquipamentos111) {
+											TipoEquipamento tipoEqui = tipoEquipamentoDAO.getTipoEquipamentoById(equipamento.getIdTipoEquipamento());
+											System.out.println("["+equipamento.getIdEquipamento() +"] Nome :"
+										+ tipoEqui.getTipoEquiNome()+" Descrição : "+ equipamento.getDescricao());
+										}
+										System.out.println("[ 0 ] para sair.");
 										int idEquipamento = scanner.nextInt();
+										if(idEquipamento==0)
+											break;
 										System.out.println("Digite o numero do Tipo do Equipamento");
-										for (TipoEquipamento tipoEquipamento : listaTipoEquipamento) {
+										for (TipoEquipamento tipoEquipamento : listaTipoEquipamentos) {
 											System.out.println("["+tipoEquipamento.getIdTipoEquipamento()+"] Nome: "+ tipoEquipamento.getTipoEquiNome());
 										}
 										int idTipoEquipamento = scanner.nextInt();
@@ -403,11 +382,25 @@ public class Main {
 									}
 									break;
 								case 2:
-									if(listaTipoEquipamento.size()>0 && listaEquipamentos.size()>0) {
+									ArrayList<TipoEquipamento> listaTipoEquipamento1 = new ArrayList<TipoEquipamento>();
+									listaTipoEquipamento1 = tipoEquipamentoDAO.getListTipoEquipamento();
+									ArrayList<Equipamento>listaEquipamentoss = new ArrayList<Equipamento>();
+									listaEquipamentoss = equipamentoDAO.getListEquipamento();
+
+									if(listaTipoEquipamento1.size()>0 && listaEquipamentoss.size()>0) {
+
 										System.out.println("Digite o id do Equipamento que será alterado");
+										for (Equipamento equipamento : listaEquipamentoss) {
+											TipoEquipamento tipoEqui = tipoEquipamentoDAO.getTipoEquipamentoById(equipamento.getIdTipoEquipamento());
+											System.out.println("["+equipamento.getIdEquipamento() +"] Nome :"
+										+ tipoEqui.getTipoEquiNome()+" Descrição : "+ equipamento.getDescricao());
+										}
+										System.out.println("[ 0 ] para sair.");
 										int idEquipamento = scanner.nextInt();
+										if(idEquipamento==0)
+											break;
 										System.out.println("Digite o numero do Tipo do Equipamento");
-										for (TipoEquipamento tipoEquipamento : listaTipoEquipamento) {
+										for (TipoEquipamento tipoEquipamento : listaTipoEquipamento1) {
 											System.out.println("["+tipoEquipamento.getIdTipoEquipamento()+"] Nome: "+ tipoEquipamento.getTipoEquiNome());
 										}
 										int idTipoEquipamento = scanner.nextInt();
@@ -423,9 +416,22 @@ public class Main {
 									}		
 									break;
 								case 3:
-									if(listaTipoEquipamento.size()>0 && listaEquipamentos.size()>0) {
-										System.out.println("Digite o id do Equipamento que será alterado");
+									ArrayList<TipoEquipamento> listaTipoEquipamento11 = new ArrayList<TipoEquipamento>();
+									listaTipoEquipamento11 = tipoEquipamentoDAO.getListTipoEquipamento();
+									ArrayList<Equipamento>listaEquipamentos11 = new ArrayList<Equipamento>();
+									listaEquipamentos11 = equipamentoDAO.getListEquipamento();
+									System.out.println("Digite o id do Equipamento que será alterado");
+									if(listaTipoEquipamento11.size()>0 && listaEquipamentos11.size()>0) {
+										for (Equipamento equipamento : listaEquipamentos11) {
+											TipoEquipamento tipoEqui = tipoEquipamentoDAO.getTipoEquipamentoById(equipamento.getIdTipoEquipamento());
+											System.out.println("["+equipamento.getIdEquipamento() +"] Nome :"
+										+ tipoEqui.getTipoEquiNome()+" Descrição : "+ equipamento.getDescricao());
+										}
+										System.out.println("[ 0 ] para sair.");
 										int idEquipamento = scanner.nextInt();
+										if(idEquipamento==0)
+											break;
+
 										System.out.println("Digite a nova descrição do Equipamento");
 										String descricao = scannerStrings.nextLine();
 										
@@ -461,7 +467,13 @@ public class Main {
 								int pacienteComando =  scanner.nextInt();
 								switch (pacienteComando) {
 								case 1:
-									if(listaPostoDeSaudes.size()>0) {
+									ArrayList<PostoDeSaude> listaPostoDeSaudes = new ArrayList<PostoDeSaude>();
+									listaPostoDeSaudes = postoDeSaudeDAO.getListPostoDeSaude();
+
+									ArrayList<Paciente> listaPacientes = new ArrayList<Paciente>();
+									listaPacientes = pacienteDAO.getListPaciente();
+		
+									if(listaPostoDeSaudes.size()>0 && listaPacientes.size()>0) {
 										System.out.println("Escolha o novo Posto de saúde do Paciente:");
 										System.out.println("Listas dos Postos de Saúde:");
 										for (PostoDeSaude postoDeSaude : listaPostoDeSaudes) {
@@ -473,51 +485,46 @@ public class Main {
 													+ " Estado: " + endereco.getEstado());
 										}
 										System.out.println("[ 0 ] Para sair");
-
-										System.out.println("Escolha o numero do Posto do Paciente:\n ");
+										
 										int idPosto = scanner.nextInt();
-
+										if(idPosto==0)
+											break;
+										
 										if (idPosto > 0 && idPosto <= postoDeSaudeDAO.getIdMax()) {
-
+											System.out.println("Lista de Pacientes :");
+											for (Paciente paciente : listaPacientes) {
+												//Endereco endereco = enderecoDAO.getEnderecoById(paciente.getIdEndereco());
+												PostoDeSaude posto = postoDeSaudeDAO.getPostoById(paciente.getIdPosto());
+												System.out.println("["+paciente.getIdPaciente()+"] Nome : "+paciente.getPacNome()+
+														" Posto de saude Nome: "+posto.getpNome()) ;
+											}	
 											System.out.println("Digite o id do Paciente que será alterado:\n ");
 											int idPaciente = scanner.nextInt();
 											System.out.println("Digite o novo nome do Paciente:\n ");
 											String pacNome = scannerStrings.nextLine();
-
+											
+											int idEndereco = pacienteDAO.getPacienteById(idPaciente).getIdEndereco();
+												
 											int numero;
-
 											String rua, bairro, cep, estado;
-
 											System.out.println("Digite o nome da Rua: ");
 											rua = scannerStrings.nextLine();
-
 											System.out.println("Digite o número da Casa: ");
 											numero = scanner.nextInt();
-
 											System.out.println("Digite o nome do Bairro: ");
 											bairro = scannerStrings.nextLine();
-
 											System.out.println("Digite o número do Cep: ");
 											cep = scannerStrings.nextLine();
 											System.out.println("Digite o nome do Estado: ");
 											estado = scannerStrings.nextLine();
-
-											Endereco endereco = new Endereco(rua, numero, bairro, cep, estado);
-//											if (enderecoDAO.alterarEndereco(endereco)) {
-												int idEndereco = enderecoDAO.getIdByObjeto(endereco);
-
-												if (idEndereco > 0) {
-													Paciente paciente = new Paciente(idPaciente,pacNome,idPosto,idEndereco);
-													if (pacienteDAO.alterarPaciente(paciente, endereco)) {
-														System.out.println("Paciente Alterado com sucesso!");
-													} else {
-														System.out.println("Falha ao tenter ao tentar Alterar");
-													}
-//												} else {
-//													System.out.println("Erro ao cadastrar 1 endereço. Tente novamente.");
-//												}
+											System.out.println("Endereco "+ idEndereco);
+											Endereco endereco = new Endereco(idEndereco,rua, numero, bairro, cep, estado);
+											
+											Paciente paciente = new Paciente(idPaciente,pacNome,idPosto,idEndereco);
+											if (pacienteDAO.alterarPaciente(paciente, endereco)) {
+												System.out.println("Paciente Alterado com sucesso!");
 											} else {
-												System.out.println("Erro ao alterar endereço. Tente novamente.");
+												System.out.println("Falha ao tenter ao tentar Alterar");
 											}
 
 										} else if (idPosto == 0) {
@@ -526,13 +533,67 @@ public class Main {
 											System.out.println("Digite apenas números que estão entre as opções.");
 										}
 
-
 									}
 									break;
 								case 2:
-									
+									ArrayList<Paciente> listaPacientes1 = new ArrayList<Paciente>();
+									listaPacientes1 = pacienteDAO.getListPaciente();
+									if(listaPacientes1.size()>0) {
+										System.out.println("Lista de Pacientes :");
+										System.out.println("Digite o id Paciente que será alterado");										
+										for (Paciente paciente : listaPacientes1) {
+											System.out.println("["+paciente.getIdPaciente()+"] Nome : "+paciente.getPacNome()+" Posto de saude id: "+paciente.getIdPosto());
+										}
+										System.out.println("[ 0 ] Para sair");
+										
+										int idPaciente = scanner.nextInt();
+										if(idPaciente==0)
+											break;
+										
+										System.out.println("Digite o novo nome do Paciente:\n ");
+										String pacNome = scannerStrings.nextLine();
+										if(pacienteDAO.alterarPacNome(idPaciente, pacNome)) {
+											System.out.println("Nome do Paciente alterado com sucesso!!\n");
+										}else {
+											System.out.println("Nome do Paciente Não foi alterado!");
+										}
+									}else {
+										System.out.println("Não há Paciente cadastrado no sistema");
+									}
 									break;
 								case 3:
+									ArrayList<Paciente> listaPacientes11 = new ArrayList<Paciente>();
+									listaPacientes11 = pacienteDAO.getListPaciente();
+									ArrayList<PostoDeSaude> listaPostoDeSaudes1 = new ArrayList<PostoDeSaude>();
+									listaPostoDeSaudes1 = postoDeSaudeDAO.getListPostoDeSaude();
+
+									if(listaPacientes11.size()>0 && listaPostoDeSaudes1.size()>0) {
+										System.out.println("Lista de Pacientes :");
+										System.out.println("Digite o id Paciente que será alterado");
+										
+										for (Paciente paciente : listaPacientes11) {
+											System.out.println("["+paciente.getIdPaciente()+"] Nome : "+paciente.getPacNome()+" Posto de saude id: "+paciente.getIdPosto());
+										}
+										System.out.println("[ 0 ] Para sair");
+										
+										int idPaciente = scanner.nextInt();
+										if(idPaciente==0)
+											break;
+										
+										System.out.println("Lista dos Posto de saúde do Pacientes :");
+										for (PostoDeSaude postoDeSaude : listaPostoDeSaudes1) {
+											System.out.println("["+postoDeSaude.getIdPosto()+"] Nome : "+postoDeSaude.getpNome());
+										}
+										System.out.println("Digite o numero do Posto de Saúde do Paciente");
+										int idPosto = scanner.nextInt();
+										if(pacienteDAO.alterarIdPosto(idPaciente, idPosto)) {
+											System.out.println("Posto de saúde do Paciente alterado com sucesso!!\n");
+										}else {
+											System.out.println("Posto de saúde do Paciente Não foi alterado!");
+										}
+									}else {
+										System.out.println("Não há Paciente cadastrado no sistema");
+									}
 									break;
 								case 4:
 									break;
@@ -546,7 +607,190 @@ public class Main {
 							}
 							break;
 						case 4:
+							boolean postoLoop = true;
+							while(postoLoop) {
+								System.out.println("Digite :");
+								System.out.println("[ 1 ] Alterar todo o Posto de Saúde");
+								System.out.println("[ 2 ] Alterar o Nome do Posto de Saúde");
+								System.out.println("[ 3 ] Alterar o endereco do Posto de Saúde");
+								System.out.println("[ 4 ] Alterar os equipamentos do Posto de Saúde");								
+								System.out.println("[ 0 ] Sair da Aba Alterar Posto de Saúde");
+								int postoComando =  scanner.nextInt();
+								switch (postoComando) {
+								case 1:
+									ArrayList<PostoDeSaude> listaPostoDeSaudes = new ArrayList<PostoDeSaude>();
+									listaPostoDeSaudes = postoDeSaudeDAO.getListPostoDeSaude();
 
+			
+									if(listaPostoDeSaudes.size()>0 ) {
+										System.out.println("Listas dos Postos de Saúde:");
+										System.out.println("Escolha o numero do Posto de saúde:\n ");										
+										for (PostoDeSaude postoDeSaude : listaPostoDeSaudes) {
+											Endereco endereco = enderecoDAO.getEnderecoById(postoDeSaude.getIdEndereco());
+											System.out.print("[ " + postoDeSaude.getIdPosto() + " ] " + "Nome do Posto: "
+													+ postoDeSaude.getpNome());
+											System.out.println(" Rua: " + endereco.getRua() + " Numero: " + endereco.getNumero()
+													+ " Bairro: " + endereco.getBairro() + " CEP: " + endereco.getCep()
+													+ " Estado: " + endereco.getEstado());
+										}
+										System.out.println("[ 0 ] Para sair");
+										int idPosto = scanner.nextInt();
+										if(idPosto==0) {
+											break;
+										}
+										if(postoComando==0) {
+											break;
+										}
+										
+										System.out.println("Digite o novo nome do Posto de saúde:");
+										String pNome = scannerStrings.nextLine();
+
+										int idEndereco = postoDeSaudeDAO.getPostoById(idPosto).getIdEndereco();
+										PostoDeSaude postoDeSaude = new PostoDeSaude(idPosto,pNome, idEndereco);
+										
+										System.out.println("Digite as novas informações de endereco!");
+										int numero;
+										String rua, bairro, cep, estado;
+										System.out.println("Digite o nome da Rua: ");
+										rua = scannerStrings.nextLine();
+										System.out.println("Digite o número da Casa: ");
+										numero = scanner.nextInt();
+										System.out.println("Digite o nome do Bairro: ");
+										bairro = scannerStrings.nextLine();
+										System.out.println("Digite o número do Cep: ");
+										cep = scannerStrings.nextLine();
+										System.out.println("Digite o nome do Estado: ");
+										estado = scannerStrings.nextLine();
+										
+										
+										Endereco endereco = new Endereco(idEndereco,rua, numero, bairro, cep, estado);
+										if(enderecoDAO.alterarEndereco(endereco)) {
+											
+											if (idPosto > 0 && idPosto <= postoDeSaudeDAO.getIdMax()) {
+												
+												if(postoDeSaudeDAO.alterarPostoDeSaude(postoDeSaude)) {
+													System.out.println("Alterado com sucesso!");
+												}else{
+													System.out.println("Falha ao tentar Alterar!");
+												}
+												
+											} else if (idPosto == 0) {
+												System.out.println("Não há Posto com esse id");
+											} else {
+												System.out.println("Digite apenas números que estão entre as opções.");
+											}
+										}else {
+											System.out.println("Falha ao cadastra o endereco");
+										}
+									}	
+									break;
+								case 2:
+									ArrayList<PostoDeSaude> listaPostoDeSaudes1 = new ArrayList<PostoDeSaude>();
+									listaPostoDeSaudes1 = postoDeSaudeDAO.getListPostoDeSaude();
+
+			
+									if(listaPostoDeSaudes1.size()>0 ) {
+										System.out.println("Listas dos Postos de Saúde:");
+										System.out.println("Digite o id do Posto de Saúde que será alterado!");
+										
+										for (PostoDeSaude postoDeSaude : listaPostoDeSaudes1) {
+											Endereco endereco = enderecoDAO.getEnderecoById(postoDeSaude.getIdEndereco());
+											System.out.print("[ " + postoDeSaude.getIdPosto() + " ] " + "Nome do Posto: "
+													+ postoDeSaude.getpNome());
+											System.out.println(" Rua: " + endereco.getRua() + " Numero: " + endereco.getNumero()
+													+ " Bairro: " + endereco.getBairro() + " CEP: " + endereco.getCep()
+													+ " Estado: " + endereco.getEstado());
+										}
+
+										System.out.println("Digite:");
+										System.out.println("[ 0 ] Para sair");
+										int idPosto = scanner.nextInt();
+										
+										if(idPosto==0) {
+											break;
+										}
+										System.out.println("Digite o novo nome do Posto de saúde!");
+										String pNome = scannerStrings.nextLine();
+										if (idPosto > 0 && idPosto <= postoDeSaudeDAO.getIdMax()) {
+											
+											if(postoDeSaudeDAO.alterarNomePosto(idPosto, pNome)) {
+												System.out.println("Nome do Posto de saúde Alterado com sucesso!");
+											}else{
+												System.out.println("Falha ao tentar Alterar o nome do Posto!");
+											}
+											
+										} else if (idPosto == 0) {
+											System.out.println("Não há Posto com esse id");
+										} else {
+											System.out.println("Digite apenas números que estão entre as opções.");
+										}
+
+									}else {
+										System.out.println("Não há Posto cadastrado no sistema!");
+									}
+									break;
+								case 3:
+									ArrayList<PostoDeSaude> listaPostoDeSaudes11 = new ArrayList<PostoDeSaude>();
+									listaPostoDeSaudes11 = postoDeSaudeDAO.getListPostoDeSaude();			
+									if(listaPostoDeSaudes11.size()>0 ) {
+										System.out.println("Listas dos Postos de Saúde:");
+										System.out.println("Digite o id do Posto de Saúde que será alterado!");
+										
+										for (PostoDeSaude postoDeSaude : listaPostoDeSaudes11) {
+											Endereco endereco = enderecoDAO.getEnderecoById(postoDeSaude.getIdEndereco());
+											System.out.print("[ " + postoDeSaude.getIdPosto() + " ] " + "Nome do Posto: "
+													+ postoDeSaude.getpNome());
+											System.out.println(" Rua: " + endereco.getRua() + " Numero: " + endereco.getNumero()
+													+ " Bairro: " + endereco.getBairro() + " CEP: " + endereco.getCep()
+													+ " Estado: " + endereco.getEstado());
+										}
+
+										System.out.println("Digite:");
+										System.out.println("[ 0 ] Para sair");
+										int idPosto = scanner.nextInt();
+										
+										if(idPosto==0) {
+											break;
+										}
+										System.out.println("Digite as novas informações de endereco!");
+										int numero;
+										String rua, bairro, cep, estado;
+										System.out.println("Digite o nome da Rua: ");
+										rua = scannerStrings.nextLine();
+										System.out.println("Digite o número da Casa: ");
+										numero = scanner.nextInt();
+										System.out.println("Digite o nome do Bairro: ");
+										bairro = scannerStrings.nextLine();
+										System.out.println("Digite o número do Cep: ");
+										cep = scannerStrings.nextLine();
+										System.out.println("Digite o nome do Estado: ");
+										estado = scannerStrings.nextLine();
+										
+										int idEndereco = postoDeSaudeDAO.getPostoById(idPosto).getIdEndereco();
+										System.out.println("dud" + idEndereco);
+										Endereco endereco = new Endereco(idEndereco,rua, numero, bairro, cep, estado);
+										if(enderecoDAO.alterarEndereco(endereco)) {
+											if(postoDeSaudeDAO.alterarEnderecoPosto(idPosto, idEndereco)) {
+												System.out.println("Endereço do Posto de saúde alterado com sucesso!");
+											}else {
+												System.out.println("Falha ao alterar endereço");
+											}
+										}else{
+											System.out.println("Falha ao alterar endereço");
+										}
+									}else {
+										System.out.println("Não há Posto de Saúde cadastrado!");
+									}
+									break;
+								case 4:
+									
+								case 0:
+									postoLoop = false;
+									break;
+								default:
+									break;
+								}
+							}
 							break;
 						case 5:
 
@@ -578,6 +822,8 @@ public class Main {
 
 						switch (remComando) {
 						case 1:
+							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
+							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							if (listaTipoEquipamento.size() > 0) {
 								System.out.println("Escolha qual é o Tipo desse Equipamento: ");
 
@@ -609,6 +855,9 @@ public class Main {
 
 							break;
 						case 2:
+							ArrayList<Equipamento>listaEquipamentos = new ArrayList<Equipamento>();
+							listaEquipamentos = equipamentoDAO.getListEquipamento();
+
 							if (listaEquipamentos.size() > 0) {
 								System.out.println("lista de Equipamentos cadastrados");
 								for (Equipamento equipamento2 : listaEquipamentos) {
@@ -637,8 +886,9 @@ public class Main {
 
 							break;
 						case 3:
+							ArrayList<Paciente> listaPacientes = new ArrayList<Paciente>();
+							listaPacientes = pacienteDAO.getListPaciente();
 							if (listaPacientes.size() > 0) {
-
 								System.out.println("Lista dos Pacientes cadastrado no sistema!");
 								for (Paciente paciente : listaPacientes) {
 									System.out.println(
@@ -713,16 +963,12 @@ public class Main {
 
 							break;
 						case 5:
-
 							ArrayList<PostoDeSaude> postosDeSaude = postoDeSaudeDAO.getListPostoDeSaude();
-
 							if (postosDeSaude.size() > 0) {
 								System.out.println("Selecione o Posto degejado: ");
-
 								for (PostoDeSaude postoDeSaude : postosDeSaude) {
 									System.out.println("[ " + postoDeSaude.getIdPosto() + " ] " + "Nome do Posto: "
 											+ postoDeSaude.getpNome());
-
 								}
 								System.out.println("[ 0 ] Para Sair");
 
@@ -752,11 +998,11 @@ public class Main {
 
 										if (escolhaEqui > 0 && escolhaEqui <= equipamentoDoPostoDAO.getIdMax()) {
 
-//											if (equipamentoDoPostoDAO.removerEquipamentoDoPosto(escolhaEqui)) {
-//												System.out.println("Equipamento removido do posto com Sucesso!");
-//											} else {
-//												System.out.println("Ocorreu algum erro na remoção. Tente novamente.");
-//											}
+											if (equipamentoDoPostoDAO.removerEquipamentoDoPosto(escolhaEqui)) {
+												System.out.println("Equipamento removido do posto com Sucesso!");
+											} else {
+												System.out.println("Ocorreu algum erro na remoção. Tente novamente.");
+											}
 
 										} else if (escolhaEqui == 0) {
 											break;
@@ -805,14 +1051,17 @@ public class Main {
 
 						switch (conComando) {
 						case 1:
+							ArrayList<TipoEquipamento> listaTipoEquipamento = new ArrayList<TipoEquipamento>();
+							listaTipoEquipamento = tipoEquipamentoDAO.getListTipoEquipamento();
 							if (listaTipoEquipamento.size() > 0) {
-								System.out.println("Escolha qual é o Tipo desse Equipamento: ");
+								System.out.println("Lista de todos os Tipos de Equipamento cadastado no sistema: ");
 
 								for (TipoEquipamento tipoEquipamento2 : listaTipoEquipamento) {
-									System.out.println("[ " + tipoEquipamento2.getIdTipoEquipamento() + " ] "
+									System.out.println(" " + tipoEquipamento2.getIdTipoEquipamento() + " Nome : "
 											+ tipoEquipamento2.getTipoEquiNome());
 
 								}
+								System.out.println("Digite:");
 								System.out.println("[ 0 ] Para sair");
 								int escolhaTipo = scanner.nextInt();
 								if(escolhaTipo > 0 && escolhaTipo < postoDeSaudeDAO.getIdMax()) {
@@ -828,11 +1077,14 @@ public class Main {
 
 							break;
 						case 2:
+							ArrayList<Equipamento>listaEquipamentos = new ArrayList<Equipamento>();
+							listaEquipamentos = equipamentoDAO.getListEquipamento();
+
 							if (listaEquipamentos.size() > 0) {
 								System.out.println("lista de Equipamentos cadastrados");
 								for (Equipamento equipamento2 : listaEquipamentos) {
 									TipoEquipamento tipo = tipoEquipamentoDAO.getTipoEquipamentoById(equipamento2.getIdTipoEquipamento());
-									System.out.println("[ " + equipamento2.getIdEquipamento() + " ] Tipo: "+ tipo.getTipoEquiNome() +" Descrição: "
+									System.out.println(" id:" + equipamento2.getIdEquipamento() + " Tipo: "+ tipo.getTipoEquiNome() +" Descrição: "
 											+ equipamento2.getDescricao());
 								}
 								System.out.println("[ 0 ] para sair");
@@ -853,8 +1105,7 @@ public class Main {
 							ArrayList<PostoDeSaude> postos = postoDeSaudeDAO.getListPostoDeSaude();
 
 							if (postos.size() > 0) {
-								System.out.println("Selecione o Posto degejado: ");
-
+								System.out.println("Deseja lista paciente de qual posto de saúde ");
 								for (PostoDeSaude postoDeSaude : postos) {
 									System.out.println("[ " + postoDeSaude.getIdPosto() + " ] " + "Nome do Posto: "
 											+ postoDeSaude.getpNome());
@@ -864,7 +1115,8 @@ public class Main {
 
 								int escolhaPosto = scanner.nextInt();
 								if (escolhaPosto > 0 && escolhaPosto <= postoDeSaudeDAO.getIdMax()) {
-									
+									ArrayList<Paciente> listaPacientes = new ArrayList<Paciente>();
+									listaPacientes = pacienteDAO.getListPaciente();
 									if (listaPacientes.size() > 0) {
 
 										System.out.println("Lista dos Pacientes cadastrado no sistema!");
@@ -925,7 +1177,9 @@ public class Main {
 							
 							break;
 						case 5:
-							
+							ArrayList<PostoDeSaude> listaPostoDeSaudes = new ArrayList<PostoDeSaude>();
+							listaPostoDeSaudes = postoDeSaudeDAO.getListPostoDeSaude();
+
 							if (listaPostoDeSaudes.size() > 0) {
 								System.out.println("Selecione o Posto degejado: ");
 
@@ -962,11 +1216,11 @@ public class Main {
 
 										if (escolhaEqui > 0 && escolhaEqui <= equipamentoDoPostoDAO.getIdMax()) {
 
-//											if (equipamentoDoPostoDAO.removerEquipamentoDoPosto(escolhaEqui)) {
-//												System.out.println("Equipamento removido do posto com Sucesso!");
-//											} else {
-//												System.out.println("Ocorreu algum erro na remoção. Tente novamente.");
-//											}
+											if (equipamentoDoPostoDAO.removerEquipamentoDoPosto(escolhaEqui)) {
+												System.out.println("Equipamento removido do posto com Sucesso!");
+											} else {
+												System.out.println("Ocorreu algum erro na remoção. Tente novamente.");
+											}
 
 										} else if (escolhaEqui == 0) {
 											break;
@@ -1007,16 +1261,39 @@ public class Main {
 					System.out.println("Comando Inválido!!! Tente um novo comando");
 					break;
 				}
-
+				
+//				} catch (InputMismatchException e) {
+//					System.out.println("Deve ser inserido numero não uma letra!");
+//					
+//				} catch (IndexOutOfBoundsException e) {
+//					System.out.println("Digite apenas números que estão entre as opções.");
+//				}
 			}
-		} catch (InputMismatchException e) {
-			System.out.println("Deve ser inserido numero não uma letra!");
-		} catch (IndexOutOfBoundsException e) {
-			System.out.println("Digite apenas números que estão entre as opções.");
-		}
+		
 
 	}
 
-	PacienteDAO pacienteDAO = new PacienteDAO();
+	private static void meuCadastro() {
+		System.out.println("Digite :");
+		System.out.println("[ 1 ] Realizar Cadastro de Tipo de Equipamento");
+		System.out.println("[ 2 ] Realizar Cadastro de Equipamentos");
+		System.out.println("[ 3 ] Realizar Cadastro de Pacientes");
+		System.out.println("[ 4 ] Realizar Cadastro de Posto de Saúde");
+		System.out.println("[ 5 ] Realizar Cadastro de Equipamentos do Posto");
+		System.out.println("[ 0 ] Sair da Aba Cadastro");
+	}
+
+	private static void menuInicial() {
+		System.out.println("Portal Saúde com transparencia");
+		System.out.println("Digite:");
+		System.out.println("[ 1 ] Realizar Cadastros");
+		System.out.println("[ 2 ] Realizar Alterações");
+		System.out.println("[ 3 ] Realizar Remoções");
+		System.out.println("[ 4 ] Realizar Consultas");
+		System.out.println("[ 0 ] Sair do Sistema");
+
+	}
+
+	//trocar o try 
 			
 }

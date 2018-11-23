@@ -140,7 +140,7 @@ public class PacienteDAO {
 
 	public boolean alterarPaciente(Paciente paciente, Endereco endereco) {
 		EnderecoDAO enderecoDAO = new EnderecoDAO();
-		String comandoSQL = "UPDATE paciente set pacNome= ?,idPosto=? ,idendereco=? where idPaciente=?";
+		String comandoSQL = "UPDATE paciente set pacNome= ?,idPosto=? ,idEndereco=? where idPaciente=?";
 		this.connection = new Conexao().getConnection();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
@@ -216,14 +216,16 @@ public class PacienteDAO {
 	}
 	public boolean alterarEndereco(int idPaciente,Endereco endereco) {
 		EnderecoDAO enderecoDAO = new EnderecoDAO();
-
-		String comandoSQL = "select idEndereco from paciente,endereco where idPaciente = ?";
+		String comandoSQL = "update Endereco set rua = ?, numero = ?, bairro = ?, cep = ?, estado = ? where idEndereco = ?";		
 		this.connection = new Conexao().getConnection();
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(comandoSQL);
-//			preparedStatement.setInt(1, posto.getIdEndereco());
-//			preparedStatement.setString(2, posto.getpNome());
-//			preparedStatement.setInt(3, posto.getIdPosto());
+			preparedStatement.setString(1, endereco.getRua());
+			preparedStatement.setInt(2, endereco.getNumero());
+			preparedStatement.setString(3, endereco.getBairro());
+			preparedStatement.setString(4, endereco.getCep());
+			preparedStatement.setString(5, endereco.getEstado());
+			preparedStatement.setInt(6, endereco.getIdEndereco());
 
 			int qtdRowsAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();

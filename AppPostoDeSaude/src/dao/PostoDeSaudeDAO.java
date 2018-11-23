@@ -147,9 +147,7 @@ public class PostoDeSaudeDAO {
 		return listaDePostosDeSaude;
 	}
 
-	public boolean alterarPostoDeSaude(PostoDeSaude posto, Endereco end) {
-
-		EnderecoDAO endereco = new EnderecoDAO();
+	public boolean alterarPostoDeSaude(PostoDeSaude posto) {
 
 		String comandoSQL = "update PostoDeSaude set idEndereco = ?, pNome = ? where idPosto = ?";
 		conecte();
@@ -165,11 +163,10 @@ public class PostoDeSaudeDAO {
 			int qtdRowsAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
 
-			if (qtdRowsAffected > 0) {
-				if (endereco.alterarEndereco(end)) {
-					return true;
-				}
-			}
+			if (qtdRowsAffected > 0) 
+				return true;
+				
+			
 
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -182,7 +179,65 @@ public class PostoDeSaudeDAO {
 		}
 		return false;
 	}
+	public boolean alterarNomePosto(int idPosto, String pNome) {		
+		String comandoSQL = "update PostoDeSaude set pNome = ? where idPosto = ?";
+		conecte();
 
+		try {
+
+			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
+
+			preparedStatement.setString(1,pNome);
+			preparedStatement.setInt(2, idPosto);
+
+			int qtdRowsAffected = preparedStatement.executeUpdate();
+			preparedStatement.close();
+
+			if (qtdRowsAffected > 0)
+					return true;
+				
+
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				this.conexao.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return false;
+	}
+	public boolean alterarEnderecoPosto(int idPosto,int idEndereco) {		
+		String comandoSQL = "update PostoDeSaude set idEndereco = ? where idPosto = ?";
+		conecte();
+
+		try {
+			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
+
+			preparedStatement.setInt(1,idEndereco);
+			preparedStatement.setInt(2, idPosto);
+
+			int qtdRowsAffected = preparedStatement.executeUpdate();
+			preparedStatement.close();
+
+			if (qtdRowsAffected > 0)
+					return true;
+				
+				
+
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				this.conexao.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
 	public int getIdByObjeto(PostoDeSaude posto) {
 		String comandoSQL = "select idPosto from PostoDeSaude where idEndereco = ?, pNome = ?";
 		conecte();
