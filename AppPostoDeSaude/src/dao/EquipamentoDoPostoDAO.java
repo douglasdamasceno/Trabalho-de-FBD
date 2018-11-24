@@ -203,7 +203,41 @@ public class EquipamentoDoPostoDAO {
 
 		return false;
 	}
+	
+	public boolean alterarQtdEquipamentoDoPosto(int idPosto,int idEquipamento,int qtd) {
+		String comandoSQL = "update EquipamentoDoPosto set qtdEquipamento = ? where idEquipamento = ?  and idPosto = ?";
+		conecte();
 
+		try {
+
+			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
+
+			preparedStatement.setInt(1, qtd);
+			preparedStatement.setInt(2, idEquipamento);
+			preparedStatement.setInt(3, idPosto);
+
+			int qtdRowsAffected = preparedStatement.executeUpdate();
+			preparedStatement.close();
+
+			if (qtdRowsAffected > 0) {
+				return true;
+			}
+
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		} finally {
+			try {
+				this.conexao.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+
+		return false;
+	}
+
+	
+	
 //	public int getIdMax() {
 //		String comandoSQL = "select max(idEquipamento) from EquipamentoDoPosto";
 //		conecte();

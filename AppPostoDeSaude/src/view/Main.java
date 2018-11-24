@@ -132,8 +132,6 @@ public class Main {
 
 									System.out.println("Digite o número do Cep: ");
 									cep = scannerStrings.nextLine();
-									// System.out.println("Digite o nome da Cidade: ");
-									// cidade = scanner.nextLine();
 									System.out.println("Digite o nome do Estado: ");
 									estado = scannerStrings.nextLine();
 
@@ -546,13 +544,13 @@ public class Main {
 										for (Paciente paciente : listaPacientes1) {
 											System.out.println("["+paciente.getIdPaciente()+"] Nome : "+paciente.getPacNome()+" Posto de saude id: "+paciente.getIdPosto());
 										}
-										System.out.println("[ 0 ] Para sair");
 										
 										int idPaciente = scanner.nextInt();
 										if(idPaciente==0)
 											break;
 										
 										System.out.println("Digite o novo nome do Paciente:\n ");
+										System.out.println("[ 0 ] Para sair");
 										String pacNome = scannerStrings.nextLine();
 										if(pacienteDAO.alterarPacNome(idPaciente, pacNome)) {
 											System.out.println("Nome do Paciente alterado com sucesso!!\n");
@@ -607,8 +605,8 @@ public class Main {
 												" Posto de saude Nome: "+posto.getpNome()) ;
 									}	
 									System.out.println("Digite o id do Paciente que será alterado:\n ");
-									int idPaciente = scanner.nextInt();
 									System.out.println("[ 0 ] para sair");
+									int idPaciente = scanner.nextInt();
 									if(idPaciente==0) {
 										break;
 									}
@@ -626,7 +624,6 @@ public class Main {
 									cep = scannerStrings.nextLine();
 									System.out.println("Digite o nome do Estado: ");
 									estado = scannerStrings.nextLine();
-									System.out.println("Endereco "+ idEndereco);
 									Endereco endereco = new Endereco(idEndereco,rua, numero, bairro, cep, estado);
 									
 									if(enderecoDAO.alterarEndereco(endereco)) {
@@ -656,7 +653,6 @@ public class Main {
 								System.out.println("[ 1 ] Alterar todo o Posto de Saúde");
 								System.out.println("[ 2 ] Alterar o Nome do Posto de Saúde");
 								System.out.println("[ 3 ] Alterar o endereco do Posto de Saúde");
-								System.out.println("[ 4 ] Alterar os equipamentos do Posto de Saúde");								
 								System.out.println("[ 0 ] Sair da Aba Alterar Posto de Saúde");
 								int postoComando =  scanner.nextInt();
 								switch (postoComando) {
@@ -821,8 +817,6 @@ public class Main {
 										System.out.println("Não há Posto de Saúde cadastrado!");
 									}
 									break;
-								case 4:
-									
 								case 0:
 									postoLoop = false;
 									break;
@@ -837,7 +831,7 @@ public class Main {
 							while(equiDoPostoLoop ) {
 								System.out.println("Digite :");
 								System.out.println("[ 1 ] Alterar o Posto de Saúde Equipamento");
-								System.out.println("[ 2 ] Alterar a quatidade de Saúde Equipamento");
+								System.out.println("[ 2 ] Alterar a quatidade de Equipamento do Posto de Saúde ");
 								System.out.println("[ 0 ] Sair da Aba Alterar Posto de Saúde");
 								int equiDoPostoComando =  scanner.nextInt();
 								switch (equiDoPostoComando) {
@@ -899,6 +893,67 @@ public class Main {
 										System.out.println("");
 									}
 									break;
+								case 2:
+									ArrayList<PostoDeSaude> listaPostoDeSaudes1 = new ArrayList<PostoDeSaude>();
+									listaPostoDeSaudes1 = postoDeSaudeDAO.getListPostoDeSaude();			
+									if(listaPostoDeSaudes1.size()>0 ) {
+										System.out.println("Listas dos Postos de Saúde:");
+										System.out.println("Escolha o numero do Posto de saúde:\n ");										
+										for (PostoDeSaude postoDeSaude : listaPostoDeSaudes1) {
+											Endereco endereco = enderecoDAO.getEnderecoById(postoDeSaude.getIdEndereco());
+											System.out.print("[ " + postoDeSaude.getIdPosto() + " ] " + "Nome do Posto: "
+													+ postoDeSaude.getpNome());
+											System.out.println(" Rua: " + endereco.getRua() + " Numero: " + endereco.getNumero()
+													+ " Bairro: " + endereco.getBairro() + " CEP: " + endereco.getCep()
+													+ " Estado: " + endereco.getEstado());
+										}
+										System.out.println("[ 0 ] Para sair");
+										int idPosto = scanner.nextInt();
+										if(idPosto==0) 
+											break;
+
+										ArrayList<EquipamentoDoPosto> listaEquiDoPosto = new ArrayList<EquipamentoDoPosto>();
+										listaEquiDoPosto = equipamentoDoPostoDAO.getListEquipamentosDoPosto(idPosto);
+											
+										System.out.println("Lista de Equipamentos do Posto "+ postoDeSaudeDAO.getPostoById(idPosto).getpNome() );
+										System.out.println("Escolha o numero do Posto de saúde:\n ");												
+										for (EquipamentoDoPosto equipamentoDoPosto : listaEquiDoPosto) {
+											Equipamento equi = equipamentoDAO.getEquipamentoByID(equipamentoDoPosto.getIdEquipamento());
+											TipoEquipamento tipoEqui = tipoEquipamentoDAO.getTipoEquipamentoById(equi.getIdTipoEquipamento());
+											EquipamentoDoPosto equiPosto = equipamentoDoPostoDAO.getEquipamentoDoPostoById(idPosto, equi.getIdEquipamento());
+											System.out.println("[ "+equi.getIdEquipamento() +" ]  Nome : "+tipoEqui.getTipoEquiNome()+ " Quantidade: " + equiPosto.getQtdEquipamento() );
+										}
+										System.out.println("[ 0 ] Para sair");
+										int idEquiDoPosto = scanner.nextInt();
+										if(idEquiDoPosto==0) 
+											break;
+										System.out.println("Digite a nova quantidade do Equipamento: ");
+										int qtdEqui = scanner.nextInt();
+//										System.out.println("Digite a data de entrega do Equipamento: ");
+//										String dataEntrega = scannerStrings.nextLine();
+//										
+										int idEquipamento =0;
+										for (EquipamentoDoPosto equipamentoDoPosto : listaEquiDoPosto) {
+											Equipamento equi = equipamentoDAO.getEquipamentoByID(equipamentoDoPosto.getIdEquipamento());
+											if(equipamentoDoPosto.getIdEquipamento() ==idEquiDoPosto) {
+												idEquipamento = equi.getIdEquipamento();
+												break;
+											}
+										}
+//										System.out.println("Digite a qtd do Equipamento:");
+//										int qtd = scanner.nextInt();
+//										EquipamentoDoPosto equiDoPosto = new EquipamentoDoPosto(idPosto, idEquipamento, qtdEqui);
+//										
+										if(equipamentoDoPostoDAO.alterarQtdEquipamentoDoPosto(idPosto, idEquipamento, qtdEqui)) {
+											System.out.println("Quantidade do Equipamento do Posto Alterado com sucesso!!");
+										}else {
+											System.out.println("Falha ao alterar Quantidade do Equipamento do Posto");
+										}
+									}else {
+										System.out.println("NÃO há posto de saúde cadastrado no sistema");
+									}
+									break;
+
 								case 0:
 									equiDoPostoLoop =false;
 									break;
