@@ -27,19 +27,14 @@ public class EquipamentoDoPostoDAO {
 	}
 
 	public boolean adicionarEquipamentoNoPosto(EquipamentoDoPosto equipDoPosto) {
-
 		String comandoSQL = "insert into EquipamentoDoPosto (idPosto, idEquipamento, qtdEquipamento, dataDeEntrega) values (?, ?, ?, ?)";
 		conecte();
-
 		try {
-
 			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
-
 			preparedStatement.setInt(1, equipDoPosto.getIdPosto());
 			preparedStatement.setInt(2, equipDoPosto.getIdEquipamento());
 			preparedStatement.setInt(3, equipDoPosto.getQtdEquipamento());
 			preparedStatement.setString(4, equipDoPosto.getDataDeEntrega());
-
 			int qtdRowsAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
 
@@ -60,17 +55,14 @@ public class EquipamentoDoPostoDAO {
 		return false;
 	}
 
-	public boolean removerEquipamentoDoPosto(int idEquiDoPosto) {
-
-		String comandoSQL = "delete from EquipamentoDoPosto where idEquiDoPosto = ?";
+	public boolean removerEquipamentoDoPosto(int idPosto,int idEquipamento) {
+		String comandoSQL = "delete from EquipamentoDoPosto where idPosto=? and idEquipamento = ? ";
 		conecte();
-
 		try {
 
 			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
-
-			preparedStatement.setInt(1, idEquiDoPosto);
-
+			preparedStatement.setInt(1, idPosto);
+			preparedStatement.setInt(2, idEquipamento);
 			int qtdRowsAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
 
@@ -92,17 +84,14 @@ public class EquipamentoDoPostoDAO {
 	}
 
 	public EquipamentoDoPosto getEquipamentoDoPostoById(int idPosto, int idEquipamento) {
-
-		String comandoSQL = "select * from EquipamentoDoPosto where idEquipamento = ? and idPosto = ?";
+		String comandoSQL = "select * from EquipamentoDoPosto where idPosto = ? and idEquipamento = ?";
 		conecte();
 
 		try {
 
 			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
-
-			preparedStatement.setInt(1, idEquipamento);
-			preparedStatement.setInt(2, idPosto);
-
+			preparedStatement.setInt(1, idPosto);
+			preparedStatement.setInt(2, idEquipamento);
 			ResultSet rs = preparedStatement.executeQuery();
 			rs.next();
 
@@ -125,20 +114,19 @@ public class EquipamentoDoPostoDAO {
 	}
 
 	public ArrayList<EquipamentoDoPosto> getListEquipamentosDoPosto(int idPosto) {
-		String comandoSQL = "select * from EquipamentoDoPosto where idPosto = ?";
+		String comandoSQL = "select * from EquipamentoDoPosto where idPosto = ? ";
 		ArrayList<EquipamentoDoPosto> listaDeEquipamentosDoPosto = new ArrayList<>();
 		conecte();
-
 		try {
-
 			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
 			preparedStatement.setInt(1, idPosto);
 			ResultSet rs = preparedStatement.executeQuery();
-
 			while (rs.next()) {
-				EquipamentoDoPosto equiDoPosto = new EquipamentoDoPosto(rs.getInt("idEquiDoPosto"),rs.getInt("idPosto"),
-						rs.getInt("idEquipamento"), rs.getInt("qtdEquipamento"), rs.getString("dataDeEntrega"));
-				listaDeEquipamentosDoPosto.add(equiDoPosto);
+				if(rs.getInt("idPosto")==idPosto) {
+					EquipamentoDoPosto equiDoPosto = new EquipamentoDoPosto(
+						rs.getInt("idPosto"),rs.getInt("idEquipamento"), rs.getInt("qtdEquipamento"), rs.getString("dataDeEntrega"));
+					listaDeEquipamentosDoPosto.add(equiDoPosto);
+				}
 			}
 
 		} catch (SQLException e) {
@@ -150,7 +138,6 @@ public class EquipamentoDoPostoDAO {
 				e2.printStackTrace();// TODO: handle exception
 			}
 		}
-
 		return listaDeEquipamentosDoPosto;
 	}
 
@@ -217,66 +204,32 @@ public class EquipamentoDoPostoDAO {
 		return false;
 	}
 
-	public int[] getIdByObjeto(EquipamentoDoPosto equiDoPosto) {
-		vetorIds = null;
-		String comandoSQL = "select idPosto, idEquipamento from EquipamentoDoPosto where qtdEquipamento = ?, dataDeEntrega = ?";
-		conecte();
-
-		try {
-
-			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
-
-			preparedStatement.setInt(1, equiDoPosto.getQtdEquipamento());
-			preparedStatement.setString(2, equiDoPosto.getDataDeEntrega());
-
-			ResultSet rs = preparedStatement.executeQuery();
-			rs.next();
-			vetorIds[0] = rs.getInt("idPosto");
-			vetorIds[1] = rs.getInt("idEquipamento");
-
-			preparedStatement.close();
-
-			return vetorIds;
-
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		} finally {
-			try {
-				this.conexao.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		}
-
-		return vetorIds;
-	}
-
-	public int getIdMax() {
-		String comandoSQL = "select max(idEquiDoPosto) from EquipamentoDoPosto";
-		conecte();
-
-		try {
-			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
-
-			ResultSet rs = preparedStatement.executeQuery();
-			rs.next();
-			int idMaximo = rs.getInt("max");
-
-			preparedStatement.close();
-
-			return idMaximo;
-
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		} finally {
-			try {
-				this.conexao.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		}
-
-		return -1;
-	}
-
+//	public int getIdMax() {
+//		String comandoSQL = "select max(idEquipamento) from EquipamentoDoPosto";
+//		conecte();
+//
+//		try {
+//			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
+//
+//			ResultSet rs = preparedStatement.executeQuery();
+//			rs.next();
+//			int idMaximo = rs.getInt("max");
+//
+//			preparedStatement.close();
+//
+//			return idMaximo;
+//
+//		} catch (SQLException e) {
+//			System.err.println(e.getMessage());
+//		} finally {
+//			try {
+//				this.conexao.close();
+//			} catch (Exception e2) {
+//				e2.printStackTrace();
+//			}
+//		}
+//
+//		return -1;
+//	}
+//
 }

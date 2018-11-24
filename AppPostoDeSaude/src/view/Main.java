@@ -30,7 +30,6 @@ public class Main {
 
 			boolean loop = true;
 			while (loop) {
-				//try {
 				menuInicial();
 				int comando = scanner.nextInt();
 
@@ -493,7 +492,6 @@ public class Main {
 										if (idPosto > 0 && idPosto <= postoDeSaudeDAO.getIdMax()) {
 											System.out.println("Lista de Pacientes :");
 											for (Paciente paciente : listaPacientes) {
-												//Endereco endereco = enderecoDAO.getEnderecoById(paciente.getIdEndereco());
 												PostoDeSaude posto = postoDeSaudeDAO.getPostoById(paciente.getIdPosto());
 												System.out.println("["+paciente.getIdPaciente()+"] Nome : "+paciente.getPacNome()+
 														" Posto de saude Nome: "+posto.getpNome()) ;
@@ -521,10 +519,14 @@ public class Main {
 											Endereco endereco = new Endereco(idEndereco,rua, numero, bairro, cep, estado);
 											
 											Paciente paciente = new Paciente(idPaciente,pacNome,idPosto,idEndereco);
-											if (pacienteDAO.alterarPaciente(paciente, endereco)) {
-												System.out.println("Paciente Alterado com sucesso!");
-											} else {
-												System.out.println("Falha ao tenter ao tentar Alterar");
+											if(enderecoDAO.alterarEndereco(endereco)) {
+												if (pacienteDAO.alterarPaciente(paciente, endereco)) {
+													System.out.println("Paciente Alterado com sucesso!");
+												} else {
+													System.out.println("Falha ao tenter ao tentar Alterar");
+												}
+											}else {
+												System.out.println("Falha ao tentar alterar o endereço!");
 											}
 
 										} else if (idPosto == 0) {
@@ -596,6 +598,47 @@ public class Main {
 									}
 									break;
 								case 4:
+									ArrayList<Paciente> listaPacientes111 = new ArrayList<Paciente>();
+									listaPacientes111 = pacienteDAO.getListPaciente();				
+									System.out.println("Lista de Pacientes :");
+									for (Paciente paciente : listaPacientes111) {
+										PostoDeSaude posto = postoDeSaudeDAO.getPostoById(paciente.getIdPosto());
+										System.out.println("["+paciente.getIdPaciente()+"] Nome : "+paciente.getPacNome()+
+												" Posto de saude Nome: "+posto.getpNome()) ;
+									}	
+									System.out.println("Digite o id do Paciente que será alterado:\n ");
+									int idPaciente = scanner.nextInt();
+									System.out.println("[ 0 ] para sair");
+									if(idPaciente==0) {
+										break;
+									}
+									int idEndereco = pacienteDAO.getPacienteById(idPaciente).getIdEndereco();
+										
+									int numero;
+									String rua, bairro, cep, estado;
+									System.out.println("Digite o nome da Rua: ");
+									rua = scannerStrings.nextLine();
+									System.out.println("Digite o número da Casa: ");
+									numero = scanner.nextInt();
+									System.out.println("Digite o nome do Bairro: ");
+									bairro = scannerStrings.nextLine();
+									System.out.println("Digite o número do Cep: ");
+									cep = scannerStrings.nextLine();
+									System.out.println("Digite o nome do Estado: ");
+									estado = scannerStrings.nextLine();
+									System.out.println("Endereco "+ idEndereco);
+									Endereco endereco = new Endereco(idEndereco,rua, numero, bairro, cep, estado);
+									
+									if(enderecoDAO.alterarEndereco(endereco)) {
+										if(pacienteDAO.alterarEndereco(idPaciente, endereco)) {
+											System.out.println("Endereço do Paciente alterado com sucesso");
+										}else {
+											System.out.println("Falha ao alterar o Paciente");
+										}
+									}else {
+										System.out.println("Falha ao alterar enderenço");
+									}
+									
 									break;
 								case 0:
 									pacienteLoop = false;
@@ -636,9 +679,6 @@ public class Main {
 										System.out.println("[ 0 ] Para sair");
 										int idPosto = scanner.nextInt();
 										if(idPosto==0) {
-											break;
-										}
-										if(postoComando==0) {
 											break;
 										}
 										
@@ -767,7 +807,6 @@ public class Main {
 										estado = scannerStrings.nextLine();
 										
 										int idEndereco = postoDeSaudeDAO.getPostoById(idPosto).getIdEndereco();
-										System.out.println("dud" + idEndereco);
 										Endereco endereco = new Endereco(idEndereco,rua, numero, bairro, cep, estado);
 										if(enderecoDAO.alterarEndereco(endereco)) {
 											if(postoDeSaudeDAO.alterarEnderecoPosto(idPosto, idEndereco)) {
@@ -793,7 +832,80 @@ public class Main {
 							}
 							break;
 						case 5:
+							
+							boolean equiDoPostoLoop = true;
+							while(equiDoPostoLoop ) {
+								System.out.println("Digite :");
+								System.out.println("[ 1 ] Alterar o Posto de Saúde Equipamento");
+								System.out.println("[ 2 ] Alterar a quatidade de Saúde Equipamento");
+								System.out.println("[ 0 ] Sair da Aba Alterar Posto de Saúde");
+								int equiDoPostoComando =  scanner.nextInt();
+								switch (equiDoPostoComando) {
+								case 1:
+									ArrayList<PostoDeSaude> listaPostoDeSaudes = new ArrayList<PostoDeSaude>();
+									listaPostoDeSaudes = postoDeSaudeDAO.getListPostoDeSaude();			
+									if(listaPostoDeSaudes.size()>0 ) {
+										System.out.println("Listas dos Postos de Saúde:");
+										System.out.println("Escolha o numero do Posto de saúde:\n ");										
+										for (PostoDeSaude postoDeSaude : listaPostoDeSaudes) {
+											Endereco endereco = enderecoDAO.getEnderecoById(postoDeSaude.getIdEndereco());
+											System.out.print("[ " + postoDeSaude.getIdPosto() + " ] " + "Nome do Posto: "
+													+ postoDeSaude.getpNome());
+											System.out.println(" Rua: " + endereco.getRua() + " Numero: " + endereco.getNumero()
+													+ " Bairro: " + endereco.getBairro() + " CEP: " + endereco.getCep()
+													+ " Estado: " + endereco.getEstado());
+										}
+										System.out.println("[ 0 ] Para sair");
+										int idPosto = scanner.nextInt();
+										if(idPosto==0) 
+											break;
 
+										ArrayList<EquipamentoDoPosto> listaEquiDoPosto = new ArrayList<EquipamentoDoPosto>();
+										listaEquiDoPosto = equipamentoDoPostoDAO.getListEquipamentosDoPosto(idPosto);
+											
+										System.out.println("Lista de Equipamentos do Posto "+ postoDeSaudeDAO.getPostoById(idPosto).getpNome() );
+										System.out.println("Escolha o numero do Posto de saúde:\n ");												
+										for (EquipamentoDoPosto equipamentoDoPosto : listaEquiDoPosto) {
+											Equipamento equi = equipamentoDAO.getEquipamentoByID(equipamentoDoPosto.getIdEquipamento());
+											TipoEquipamento tipoEqui = tipoEquipamentoDAO.getTipoEquipamentoById(equi.getIdTipoEquipamento());
+											System.out.println("[ "+equi.getIdEquipamento() +" ]  Nome : "+tipoEqui.getTipoEquiNome()+ " Descrição: " + equi.getDescricao() );
+										}
+										System.out.println("[ 0 ] Para sair");
+										int idEquiDoPosto = scanner.nextInt();
+										if(idEquiDoPosto==0) 
+											break;
+										System.out.println("Digite a nova quantidade do Equipamento: ");
+										int qtdEqui = scanner.nextInt();
+										System.out.println("Digite a data de entrega do Equipamento: ");
+										String dataEntrega = scannerStrings.nextLine();
+										
+										int idEquipamento =0;
+										for (EquipamentoDoPosto equipamentoDoPosto : listaEquiDoPosto) {
+											Equipamento equi = equipamentoDAO.getEquipamentoByID(equipamentoDoPosto.getIdEquipamento());
+											if(equipamentoDoPosto.getIdEquipamento() ==idEquiDoPosto) {
+												idEquipamento = equi.getIdEquipamento();
+												break;
+											}
+										}
+										
+										EquipamentoDoPosto equiDoPosto = new EquipamentoDoPosto(idPosto, idEquipamento, qtdEqui, dataEntrega);
+										
+										if(equipamentoDoPostoDAO.alterarEquipamentoDoPosto(equiDoPosto)) {
+											System.out.println("Equipamento do Posto Alterado com sucesso!!");
+										}else {
+											System.out.println("Falha ao alterar Equipamento do Posto");
+										}
+									}else {
+										System.out.println("");
+									}
+									break;
+								case 0:
+									equiDoPostoLoop =false;
+									break;
+								default:
+									break;
+								}
+							}
 							break;
 						case 0:
 							altLoop = false;
@@ -979,14 +1091,13 @@ public class Main {
 											.getListEquipamentosDoPosto(escolhaPosto);
 
 									if (equipamentosDoPosto.size() > 0) {
-										System.out.println("Selecione o equipamento que degeja excluir do posto.");
-
+										System.out.println("Selecione o equipamento que deseja excluir do posto.");
 										for (EquipamentoDoPosto equipamentoDoPosto : equipamentosDoPosto) {
 											Equipamento equi = equipamentoDAO
-													.getEquipamentoByID(equipamentoDoPosto.getIdEquiDoPosto());
+													.getEquipamentoByID(equipamentoDoPosto.getIdEquipamento());
 											TipoEquipamento tipo = tipoEquipamentoDAO
 													.getTipoEquipamentoById(equi.getIdTipoEquipamento());
-											System.out.println("[ " + equipamentoDoPosto.getIdEquiDoPosto() + " ]"
+											System.out.println("[ " + equipamentoDoPosto.getIdEquipamento() + " ]"
 													+ " Tipo: " + tipo.getTipoEquiNome() + " Descrição: "
 													+ equi.getDescricao() + "Quantidade: "
 													+ equipamentoDoPosto.getQtdEquipamento() + " Data de entrega: "
@@ -995,21 +1106,14 @@ public class Main {
 										System.out.println("[ 0 ] Para sair");
 
 										int escolhaEqui = scanner.nextInt();
-
-										if (escolhaEqui > 0 && escolhaEqui <= equipamentoDoPostoDAO.getIdMax()) {
-
-											if (equipamentoDoPostoDAO.removerEquipamentoDoPosto(escolhaEqui)) {
-												System.out.println("Equipamento removido do posto com Sucesso!");
-											} else {
-												System.out.println("Ocorreu algum erro na remoção. Tente novamente.");
-											}
-
-										} else if (escolhaEqui == 0) {
+										if (escolhaEqui == 0)
 											break;
+										
+										if (equipamentoDoPostoDAO.removerEquipamentoDoPosto(escolhaPosto,escolhaEqui)) {
+												System.out.println("Equipamento removido do posto com Sucesso!");
 										} else {
-											System.out.println("Equipamento não encontrado no Posto com esse numero!");
+												System.out.println("Ocorreu algum erro na remoção. Tente novamente.");
 										}
-
 									} else {
 										System.out.println("Nenhum Equipamento cadastrado no posto Escolhido");
 									}
@@ -1033,7 +1137,6 @@ public class Main {
 							break;
 						}
 					}
-
 					break;
 				case 4:
 
@@ -1201,10 +1304,10 @@ public class Main {
 
 										for (EquipamentoDoPosto equipamentoDoPosto : equipamentosDoPosto) {
 											Equipamento equi = equipamentoDAO
-													.getEquipamentoByID(equipamentoDoPosto.getIdEquiDoPosto());
+													.getEquipamentoByID(equipamentoDoPosto.getIdEquipamento());
 											TipoEquipamento tipo = tipoEquipamentoDAO
 													.getTipoEquipamentoById(equi.getIdTipoEquipamento());
-											System.out.println("[ " + equipamentoDoPosto.getIdEquiDoPosto() + " ]"
+											System.out.println("[ " + equipamentoDoPosto.getIdEquipamento() + " ]"
 													+ " Tipo: " + tipo.getTipoEquiNome() + " Descrição: "
 													+ equi.getDescricao() + "Quantidade: "
 													+ equipamentoDoPosto.getQtdEquipamento() + " Data de entrega: "
@@ -1214,9 +1317,9 @@ public class Main {
 
 										int escolhaEqui = scanner.nextInt();
 
-										if (escolhaEqui > 0 && escolhaEqui <= equipamentoDoPostoDAO.getIdMax()) {
+										if (escolhaEqui > 0 ) {
 
-											if (equipamentoDoPostoDAO.removerEquipamentoDoPosto(escolhaEqui)) {
+											if (equipamentoDoPostoDAO.removerEquipamentoDoPosto(escolhaPosto,escolhaEqui)) {
 												System.out.println("Equipamento removido do posto com Sucesso!");
 											} else {
 												System.out.println("Ocorreu algum erro na remoção. Tente novamente.");

@@ -1,8 +1,12 @@
 package view;
 
+import java.util.ArrayList;
+
 import dao.EnderecoDAO;
+import dao.EquipamentoDoPostoDAO;
 import dao.PacienteDAO;
 import model.Endereco;
+import model.EquipamentoDoPosto;
 import model.Paciente;
 
 public class teste {
@@ -24,6 +28,19 @@ public class teste {
 			System.out.println("OK");
 		}else {
 			System.out.println("false");
+		}
+		EquipamentoDoPostoDAO equiPostoDAO = new EquipamentoDoPostoDAO();
+		
+//		if(equiPostoDAO.removerEquipamentoDoPosto(6, 2))
+//			System.out.println("ok");
+//		else
+//			System.out.println("Falso");
+//		
+		
+		ArrayList<EquipamentoDoPosto> listaEquiPosto = equiPostoDAO.getListEquipamentosDoPosto(6);
+		
+		for (EquipamentoDoPosto equipamentoDoPosto : listaEquiPosto) {
+			System.out.println("Nome: "+ equipamentoDoPosto.getIdEquipamento());
 		}
 		
 	}	
