@@ -25,6 +25,18 @@ public class EnderecoDAO {
 		this.conexao = new Conexao().getConnection();
 	}
 
+	public PreparedStatement setarString(int num, String texto) throws SQLException {
+		PreparedStatement preparedStatement = conexao.prepareStatement("insert into Endereco (rua, numero, bairro, cep, estado) values (?, ?, ?, ?, ?)");
+		preparedStatement.setString(num, texto);
+		return preparedStatement;
+	}
+	
+	public PreparedStatement setarInt(int numero, int num) throws SQLException {
+		PreparedStatement preparedStatement = conexao.prepareStatement("insert into Endereco (rua, numero, bairro, cep, estado) values (?, ?, ?, ?, ?)");
+		preparedStatement.setInt(num, numero);
+		return preparedStatement;
+	}
+	
 	public boolean adicionarEndereco(Endereco endereco) {
 		String comandoSQL = "insert into Endereco (rua, numero, bairro, cep, estado) values (?, ?, ?, ?, ?)";
 		conecte();
@@ -32,11 +44,11 @@ public class EnderecoDAO {
 		try {
 			PreparedStatement preparedStatement = conexao.prepareStatement(comandoSQL);
 
-			preparedStatement.setString(1, endereco.getRua());
-			preparedStatement.setInt(2, endereco.getNumero());
-			preparedStatement.setString(3, endereco.getBairro());
-			preparedStatement.setString(4, endereco.getCep());
-			preparedStatement.setString(5, endereco.getEstado());
+			setarString(1, endereco.getRua());
+			setarInt(2, endereco.getNumero());
+			setarString(3, endereco.getBairro());
+			setarString(4, endereco.getCep());
+			setarString(5, endereco.getEstado());
 
 			int qtdRowsAffected = preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -241,5 +253,3 @@ public class EnderecoDAO {
 //		
 //		return false;
 //	}
-
-}
